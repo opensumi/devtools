@@ -11,6 +11,8 @@ const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 const alias = {
   'react-dom': '@hot-loader/react-dom',
+  'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
+  'react/jsx-runtime': 'react/jsx-runtime.js',
 };
 
 // load the secrets
