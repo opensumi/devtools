@@ -1,0 +1,29 @@
+.tool-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.filter-container {
+  .filter {
+    inline-size: 100%;
+    padding: 2px;
+    font-size: 10px;
+  }
+
+  .filter-cell {
+    line-height: 30px;
+    padding: 0;
+
+    > div {
+      padding-block: 0;
+      padding-inline: 8px;
+
+      &:first-child {
+        border-block-end: 1px solid var(--rdg-border-color);
+      }
+    }
+  }
+}

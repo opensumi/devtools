@@ -2,7 +2,7 @@ import React from 'react';
 import './Panel.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import MessagesTab from './MessagesTab';
+import MessagesTab from './MessagesTab/MessagesTab';
 
 const Panel = () => {
   return (
