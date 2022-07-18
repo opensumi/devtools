@@ -41,7 +41,7 @@ const MessagesTab = () => {
   const [autoScroll, setAutoScroll] = useState(true);
   const [filters, setFilters] = useState({
     subString: '',
-    enabled: true,
+    enabled: false,
   });
 
   const gridRef = useRef(null);
