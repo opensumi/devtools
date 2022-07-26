@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useRef,
   useMemo,
+  useCallback,
   createContext,
   useContext,
 } from 'react';
@@ -12,6 +13,13 @@ import { useFocusRef } from './useFocusRef';
 import './MessagesTab.scss';
 
 const INTERVAL = 500;
+
+const serviceMethodSplit = (serviceMethod) => {
+  if (serviceMethod.startsWith('on')) {
+    serviceMethod = serviceMethod.slice(3);
+  }
+  return serviceMethod.split(':');
+};
 
 const inputStopPropagation = (event) => {
   if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
@@ -36,14 +44,15 @@ const FilterRenderer = ({ isCellSelected, column, children }) => {
 const MessagesTab = () => {
   const [capturing, setCapturing] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [timer, setTimer] = useState(null);
   const [bottomRow, setBottomRow] = useState(-1);
   const [autoScroll, setAutoScroll] = useState(true);
   const [filters, setFilters] = useState({
-    subString: '',
+    send: '',
+    receive: '',
     enabled: false,
   });
 
+  const timer = useRef(null);
   const gridRef = useRef(null);
 
   const commonColumnProperties = useMemo(
@@ -65,12 +74,32 @@ const MessagesTab = () => {
       {
         key: 'time',
         name: 'Time',
-        width: 135,
+        minWidth: 75,
+        width: 75,
         frozen: true,
       },
       {
-        key: 'message',
-        name: 'Message',
+        key: 'type',
+        name: 'Type',
+        minWidth: 40,
+        width: 50,
+        frozen: true,
+      },
+      {
+        key: 'service',
+        name: 'Service',
+        width: 100,
+        frozen: true,
+      },
+      {
+        key: 'method',
+        name: 'Method',
+        width: 100,
+        frozen: true,
+      },
+      {
+        key: 'send',
+        name: 'Send',
         headerCellClass: 'filter-cell',
         headerRenderer: (p) => (
           <FilterRenderer {...p}>
@@ -78,9 +107,29 @@ const MessagesTab = () => {
               <input
                 {...rest}
                 className="filter"
-                value={filters.subString}
+                value={filters.send}
                 onChange={(e) => {
-                  setFilters({ ...filters, subString: e.target.value });
+                  setFilters({ ...filters, send: e.target.value });
+                }}
+                onKeyDown={inputStopPropagation}
+              />
+            )}
+          </FilterRenderer>
+        ),
+      },
+      {
+        key: 'receive',
+        name: 'Receive',
+        headerCellClass: 'filter-cell',
+        headerRenderer: (p) => (
+          <FilterRenderer {...p}>
+            {({ filters, ...rest }) => (
+              <input
+                {...rest}
+                className="filter"
+                value={filters.receive}
+                onChange={(e) => {
+                  setFilters({ ...filters, receive: e.target.value });
                 }}
                 onKeyDown={inputStopPropagation}
               />
@@ -98,8 +147,102 @@ const MessagesTab = () => {
 
   const addMessages = () => {
     getMessages()
-      .then((newMessages) => {
-        setMessages((oldMessages) => [...oldMessages, ...newMessages]);
+      .then((newRawMessages) => {
+        const newMessages = [];
+        setMessages((messages) => {
+          // if new message is requestResult, the corresponding sendRequest row should be updated
+          const updatedMessages = messages.concat();
+
+          newRawMessages.forEach((message) => {
+            const msg = {
+              time: message.time,
+              type: message.type,
+            };
+
+            let serviceMethodSplitResult;
+            if (message.serviceMethod) {
+              serviceMethodSplitResult = serviceMethodSplit(
+                message.serviceMethod
+              );
+            }
+
+            if (msg.type === 'sendNotification') {
+              msg.type = '↑';
+              msg.service = serviceMethodSplitResult[0];
+              msg.method = serviceMethodSplitResult[1];
+              msg.send = JSON.stringify(...message.arguments);
+            } else if (msg.type === 'sendRequest') {
+              msg.type = '↑↓';
+              msg.requestId = message.requestId;
+              msg.service = serviceMethodSplitResult[0];
+              msg.method = serviceMethodSplitResult[1];
+              msg.send = JSON.stringify(...message.arguments);
+            } else if (msg.type === 'requestResult') {
+              msg.type = '↑↓';
+              msg.requestId = message.requestId;
+              msg.status = message.status;
+              if (msg.status === 'success') {
+                msg.receive = JSON.stringify(message.data);
+              } else if (msg.status === 'fail') {
+                msg.receive = JSON.stringify(message.error);
+              }
+            } else if (msg.type === 'onNotification') {
+              msg.type = '↓';
+              msg.service = serviceMethodSplitResult[0];
+              msg.method = serviceMethodSplitResult[1];
+              msg.receive = JSON.stringify(...message.arguments);
+            } else if (msg.type === 'onRequest') {
+              msg.type = '↓';
+              msg.service = serviceMethodSplitResult[0];
+              msg.method = serviceMethodSplitResult[1];
+              msg.status = message.status;
+              if (msg.status === 'success') {
+                msg.receive = JSON.stringify(...message.arguments);
+              } else if (msg.status === 'fail') {
+                msg.receive = 'The requested method is not registered!';
+              }
+            }
+
+            if (msg.type !== '↑↓') {
+              newMessages.push(msg);
+            } else {
+              // merge requestResult row into corresponding sendRequest row
+              let isCorrespondingRowInNewMessages = false;
+              let isCorrespondingRowInMessages = false;
+
+              for (let i = newMessages.length - 1; i >= 0; i--) {
+                if (newMessages[i].type === '↑↓') {
+                  if (newMessages[i].requestId === msg.requestId) {
+                    newMessages[i].receive = msg.receive;
+                    isCorrespondingRowInNewMessages = true;
+                    break;
+                  }
+                }
+              }
+
+              if (!isCorrespondingRowInNewMessages) {
+                for (let i = messages.length - 1; i >= 0; i--) {
+                  if (messages[i].type === '↑↓') {
+                    if (messages[i].requestId === msg.requestId) {
+                      updatedMessages[i] = structuredClone(messages[i]);
+                      updatedMessages[i].receive = msg.receive;
+                      isCorrespondingRowInMessages = true;
+                      break;
+                    }
+                  }
+                }
+              }
+
+              // corresponding sendRequest raw was cleared
+              if (!isCorrespondingRowInNewMessages && !isCorrespondingRowInMessages) {
+                newMessages.push(msg);
+              }
+            }
+          });
+
+          return [...updatedMessages, ...newMessages];
+        });
+
         if (newMessages.length > 0) {
           setBottomRow((oldBottomRow) => oldBottomRow + newMessages.length);
         }
@@ -117,14 +260,14 @@ const MessagesTab = () => {
   const filteredRows = useMemo(() => {
     return messages
       .map((msg, index) => {
-        return {
-          id: index,
-          time: msg.time,
-          message: msg.msg,
-        };
+        msg.id = index;
+        return msg;
       })
       .filter((r) => {
-        return filters.subString ? r.message.includes(filters.subString) : true;
+        return (
+          (filters.send ? r.send && r.send.includes(filters.send) : true) &&
+          (filters.receive ? r.receive && r.receive.includes(filters.receive) : true)
+        );
       });
   }, [messages, filters]);
 
@@ -133,8 +276,8 @@ const MessagesTab = () => {
       stopCapturing()
         .then(() => {
           setCapturing(false);
-          clearInterval(timer);
-          setTimer(null);
+          clearInterval(timer.current);
+          timer.current = null;
         })
         .catch((error) => {
           console.error('Stoping capturing failed!');
@@ -144,7 +287,7 @@ const MessagesTab = () => {
       startCapturing()
         .then(() => {
           setCapturing(true);
-          setTimer(setInterval(() => addMessages(), INTERVAL));
+          timer.current = setInterval(() => addMessages(), INTERVAL);
         })
         .catch((error) => {
           console.error('Starting capturing failed!');
@@ -166,7 +309,8 @@ const MessagesTab = () => {
 
   const clearFilters = () => {
     setFilters({
-      subString: '',
+      send: '',
+      receive: '',
       enabled: true,
     });
   };

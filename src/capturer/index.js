@@ -11,19 +11,43 @@ const startCapturing = () => {
 
     window.__opensumi_devtools.messages = [];
 
-    window.__opensumi_devtools.capture = (msg) => {
+    window.__opensumi_devtools.capture = (message) => {
       if (window.__opensumi_devtools.evaling) return;
 
-      try {
-        msg = JSON.stringify(msg);
-      } catch (error) {
-        msg = `Failed to serialize args to JSON: ${error.message || error}`;
+      const msg = {
+        time: new Date().toLocaleString().split(' ')[1],
+        type: message.type,
+      };
+
+      if (msg.type === 'sendNotification') {
+        msg.serviceMethod = message.serviceMethod;
+        msg.arguments = message.arguments;
+      } else if (msg.type === 'sendRequest') {
+        msg.requestId = message.requestId;
+        msg.serviceMethod = message.serviceMethod;
+        msg.arguments = message.arguments;
+      } else if (msg.type === 'requestResult') {
+        msg.requestId = message.requestId;
+        msg.status = message.status;
+        if (msg.status === 'success') {
+          msg.data = message.data;
+        } else if (msg.status === 'fail') {
+          msg.error = message.error;
+        }
+      } else if (msg.type === 'onNotification') {
+        msg.serviceMethod = message.serviceMethod;
+        msg.arguments = message.arguments;
+      } else if (msg.type === 'onRequest') {
+        msg.serviceMethod = message.serviceMethod;
+        msg.status = message.status;
+        if (msg.status === 'success') {
+          msg.arguments = message.arguments;
+        } else if (msg.status === 'fail') {
+          // method not registered
+        }
       }
 
-      window.__opensumi_devtools.messages.push({
-        time: new Date().toLocaleString(),
-        msg: msg,
-      });
+      window.__opensumi_devtools.messages.push(msg);
     };
   });
 };
