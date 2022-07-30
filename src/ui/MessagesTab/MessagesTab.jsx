@@ -3,23 +3,16 @@ import React, {
   useEffect,
   useRef,
   useMemo,
-  useCallback,
   createContext,
   useContext,
 } from 'react';
 import DataGrid from 'react-data-grid';
 import { startCapturing, stopCapturing, getMessages } from '../../capturer';
 import { useFocusRef } from './useFocusRef';
+import { updateMessages } from './messagesHelper';
 import './MessagesTab.scss';
 
 const INTERVAL = 500;
-
-const serviceMethodSplit = (serviceMethod) => {
-  if (serviceMethod.startsWith('on')) {
-    serviceMethod = serviceMethod.slice(3);
-  }
-  return serviceMethod.split(':');
-};
 
 const inputStopPropagation = (event) => {
   if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
@@ -148,103 +141,19 @@ const MessagesTab = () => {
   const addMessages = () => {
     getMessages()
       .then((newRawMessages) => {
-        const newMessages = [];
-        setMessages((messages) => {
-          // if new message is requestResult, the corresponding sendRequest row should be updated
-          const updatedMessages = messages.concat();
+        let newMessagesLength = 0;
 
-          newRawMessages.forEach((message) => {
-            const msg = {
-              time: message.time,
-              type: message.type,
-            };
-
-            let serviceMethodSplitResult;
-            if (message.serviceMethod) {
-              serviceMethodSplitResult = serviceMethodSplit(
-                message.serviceMethod
-              );
-            }
-
-            if (msg.type === 'sendNotification') {
-              msg.type = '↑';
-              msg.service = serviceMethodSplitResult[0];
-              msg.method = serviceMethodSplitResult[1];
-              msg.send = JSON.stringify(...message.arguments);
-            } else if (msg.type === 'sendRequest') {
-              msg.type = '↑↓';
-              msg.requestId = message.requestId;
-              msg.service = serviceMethodSplitResult[0];
-              msg.method = serviceMethodSplitResult[1];
-              msg.send = JSON.stringify(...message.arguments);
-            } else if (msg.type === 'requestResult') {
-              msg.type = '↑↓';
-              msg.requestId = message.requestId;
-              msg.status = message.status;
-              if (msg.status === 'success') {
-                msg.receive = JSON.stringify(message.data);
-              } else if (msg.status === 'fail') {
-                msg.receive = JSON.stringify(message.error);
-              }
-            } else if (msg.type === 'onNotification') {
-              msg.type = '↓';
-              msg.service = serviceMethodSplitResult[0];
-              msg.method = serviceMethodSplitResult[1];
-              msg.receive = JSON.stringify(...message.arguments);
-            } else if (msg.type === 'onRequest') {
-              msg.type = '↓';
-              msg.service = serviceMethodSplitResult[0];
-              msg.method = serviceMethodSplitResult[1];
-              msg.status = message.status;
-              if (msg.status === 'success') {
-                msg.receive = JSON.stringify(...message.arguments);
-              } else if (msg.status === 'fail') {
-                msg.receive = 'The requested method is not registered!';
-              }
-            }
-
-            if (msg.type !== '↑↓') {
-              newMessages.push(msg);
-            } else {
-              // merge requestResult row into corresponding sendRequest row
-              let isCorrespondingRowInNewMessages = false;
-              let isCorrespondingRowInMessages = false;
-
-              for (let i = newMessages.length - 1; i >= 0; i--) {
-                if (newMessages[i].type === '↑↓') {
-                  if (newMessages[i].requestId === msg.requestId) {
-                    newMessages[i].receive = msg.receive;
-                    isCorrespondingRowInNewMessages = true;
-                    break;
-                  }
-                }
-              }
-
-              if (!isCorrespondingRowInNewMessages) {
-                for (let i = messages.length - 1; i >= 0; i--) {
-                  if (messages[i].type === '↑↓') {
-                    if (messages[i].requestId === msg.requestId) {
-                      updatedMessages[i] = structuredClone(messages[i]);
-                      updatedMessages[i].receive = msg.receive;
-                      isCorrespondingRowInMessages = true;
-                      break;
-                    }
-                  }
-                }
-              }
-
-              // corresponding sendRequest raw was cleared
-              if (!isCorrespondingRowInNewMessages && !isCorrespondingRowInMessages) {
-                newMessages.push(msg);
-              }
-            }
-          });
-
+        setMessages((oldMessages) => {
+          const { updatedMessages, newMessages } = updateMessages(
+            oldMessages,
+            newRawMessages
+          );
+          newMessagesLength = newMessages.length;
           return [...updatedMessages, ...newMessages];
         });
 
-        if (newMessages.length > 0) {
-          setBottomRow((oldBottomRow) => oldBottomRow + newMessages.length);
+        if (newMessagesLength > 0) {
+          setBottomRow((oldBottomRow) => oldBottomRow + newMessagesLength);
         }
       })
       .catch((error) => {
@@ -266,7 +175,9 @@ const MessagesTab = () => {
       .filter((r) => {
         return (
           (filters.send ? r.send && r.send.includes(filters.send) : true) &&
-          (filters.receive ? r.receive && r.receive.includes(filters.receive) : true)
+          (filters.receive
+            ? r.receive && r.receive.includes(filters.receive)
+            : true)
         );
       });
   }, [messages, filters]);

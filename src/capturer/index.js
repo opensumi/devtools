@@ -38,12 +38,16 @@ const startCapturing = () => {
         msg.serviceMethod = message.serviceMethod;
         msg.arguments = message.arguments;
       } else if (msg.type === 'onRequest') {
+        msg.requestId = message.requestId;
         msg.serviceMethod = message.serviceMethod;
+        msg.arguments = message.arguments;
+      } else if (msg.type === 'onRequestResult') {
+        msg.requestId = message.requestId;
         msg.status = message.status;
         if (msg.status === 'success') {
-          msg.arguments = message.arguments;
+          msg.data = message.data;
         } else if (msg.status === 'fail') {
-          // method not registered
+          msg.error = message.error;
         }
       }
 
