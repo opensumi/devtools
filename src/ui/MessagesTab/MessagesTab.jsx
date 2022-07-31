@@ -62,33 +62,33 @@ const MessagesTab = () => {
         name: 'ID',
         minWidth: 40,
         width: 50,
-        frozen: true,
+        // frozen: true,
       },
       {
         key: 'time',
         name: 'Time',
         minWidth: 75,
         width: 75,
-        frozen: true,
+        // frozen: true,
       },
       {
         key: 'type',
         name: 'Type',
         minWidth: 40,
         width: 50,
-        frozen: true,
+        // frozen: true,
       },
       {
         key: 'service',
         name: 'Service',
         width: 100,
-        frozen: true,
+        // frozen: true,
       },
       {
         key: 'method',
         name: 'Method',
         width: 100,
-        frozen: true,
+        // frozen: true,
       },
       {
         key: 'send',
@@ -261,13 +261,13 @@ const MessagesTab = () => {
       </div>
       <FilterContext.Provider value={filters}>
         <DataGrid
-          className={filters.enabled ? 'filter-container' : undefined}
-          style={{ fontSize: '10px', height: 'calc(100vh - 81px' }}
+          className={`rdg-light ${filters.enabled ? 'filter-container' : undefined}`}
+          style={{ fontSize: '10px', height: 'calc(100vh - 40px' }}
           ref={gridRef}
           columns={columns}
           rows={filteredRows}
           rowKeyGetter={(row) => row.id}
-          headerRowHeight={filters.enabled ? 60 : 30}
+          headerRowHeight={filters.enabled ? 52 : 25}
           rowHeight={20}
         />
       </FilterContext.Provider>
