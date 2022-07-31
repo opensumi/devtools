@@ -228,12 +228,36 @@ const MessagesTab = () => {
 
   return (
     <div>
-      <div className="tool-bar">
-        <button onClick={toggleCapturing}>toggleCapturing</button>
-        <button onClick={clearMessages}>clearMessages</button>
-        <button onClick={toggleAutoScroll}>toggleAutoScroll</button>
-        <button onClick={toggleFilters}>toggleFilters</button>
-        <button onClick={clearFilters}>clearFilters</button>
+      <div className="toolbar">
+        <button
+          className={`toolbar-button ${capturing ? 'active' : ''}`}
+          onClick={toggleCapturing}
+        >
+          <span className="toolbar-icon icon-record"></span>
+          Capture
+        </button>
+        <button className="toolbar-button" onClick={clearMessages}>
+          <span className="toolbar-icon icon-clear"></span>
+          Clear
+        </button>
+        <button
+          className={`toolbar-button ${autoScroll ? 'active' : ''}`}
+          onClick={toggleAutoScroll}
+        >
+          <span className="toolbar-icon icon-bottom"></span>
+          Scroll
+        </button>
+        <button
+          className={`toolbar-button ${filters.enabled ? 'active' : ''}`}
+          onClick={toggleFilters}
+        >
+          <span className="toolbar-icon icon-filter"></span>
+          Filters
+        </button>
+        <button className="toolbar-button" onClick={clearFilters}>
+          <span className="toolbar-icon icon-reset"></span>
+          Reset Filters
+        </button>
       </div>
       <FilterContext.Provider value={filters}>
         <DataGrid
