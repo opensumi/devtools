@@ -4,35 +4,16 @@ import React, {
   useRef,
   useMemo,
   createContext,
-  useContext,
 } from 'react';
 import DataGrid from 'react-data-grid';
 import { startCapturing, stopCapturing, getMessages } from '../../capturer';
-import { useFocusRef } from './useFocusRef';
 import { updateMessages } from './messagesHelper';
+import { generateColumns } from './columnsHelper';
 import './MessagesTab.scss';
 
 const INTERVAL = 500;
 
-const inputStopPropagation = (event) => {
-  if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-    event.stopPropagation();
-  }
-};
-
 const FilterContext = createContext(undefined);
-
-const FilterRenderer = ({ isCellSelected, column, children }) => {
-  const filters = useContext(FilterContext);
-  const { ref, tabIndex } = useFocusRef(isCellSelected);
-
-  return (
-    <>
-      <div>{column.name}</div>
-      {filters.enabled && <div>{children({ ref, tabIndex, filters })}</div>}
-    </>
-  );
-};
 
 const MessagesTab = () => {
   const [capturing, setCapturing] = useState(false);
@@ -40,120 +21,87 @@ const MessagesTab = () => {
   const [bottomRow, setBottomRow] = useState(-1);
   const [autoScroll, setAutoScroll] = useState(true);
   const [filters, setFilters] = useState({
+    type: '',
+    service: '',
+    method: '',
     send: '',
     receive: '',
     enabled: false,
   });
+  const [services, setServices] = useState([]); // all kinds of services in messages
+  const [methods, setMethods] = useState([]); // all kinds of methods in messages
 
   const timer = useRef(null);
   const gridRef = useRef(null);
-
-  const commonColumnProperties = useMemo(
-    () => ({
-      resizable: true,
-    }),
-    []
-  );
-
-  const columns = useMemo(() => {
-    return [
-      {
-        key: 'id',
-        name: 'ID',
-        minWidth: 40,
-        width: 50,
-        // frozen: true,
-      },
-      {
-        key: 'time',
-        name: 'Time',
-        minWidth: 75,
-        width: 75,
-        // frozen: true,
-      },
-      {
-        key: 'type',
-        name: 'Type',
-        minWidth: 40,
-        width: 50,
-        // frozen: true,
-      },
-      {
-        key: 'service',
-        name: 'Service',
-        width: 100,
-        // frozen: true,
-      },
-      {
-        key: 'method',
-        name: 'Method',
-        width: 100,
-        // frozen: true,
-      },
-      {
-        key: 'send',
-        name: 'Send',
-        headerCellClass: 'filter-cell',
-        headerRenderer: (p) => (
-          <FilterRenderer {...p}>
-            {({ filters, ...rest }) => (
-              <input
-                {...rest}
-                className="filter"
-                value={filters.send}
-                onChange={(e) => {
-                  setFilters({ ...filters, send: e.target.value });
-                }}
-                onKeyDown={inputStopPropagation}
-              />
-            )}
-          </FilterRenderer>
-        ),
-      },
-      {
-        key: 'receive',
-        name: 'Receive',
-        headerCellClass: 'filter-cell',
-        headerRenderer: (p) => (
-          <FilterRenderer {...p}>
-            {({ filters, ...rest }) => (
-              <input
-                {...rest}
-                className="filter"
-                value={filters.receive}
-                onChange={(e) => {
-                  setFilters({ ...filters, receive: e.target.value });
-                }}
-                onKeyDown={inputStopPropagation}
-              />
-            )}
-          </FilterRenderer>
-        ),
-      },
-    ].map((c) => ({ ...c, ...commonColumnProperties }));
-  }, [commonColumnProperties]);
+  const servicesRef = useRef(new Set()); // we need ref to get old values in all renders
+  const methodsRef = useRef(new Set());
 
   // run if autoScroll or bottomRow changes
   useEffect(() => {
     gridRef.current && autoScroll && gridRef.current.scrollToRow(bottomRow);
   }, [autoScroll, bottomRow]);
 
+  // it is not very elegent to use two variables to store same thing
+  // but can prevent unnecessary render that will disrupt users when
+  // they are selecting options from <select>
+  if (services.length !== servicesRef.current.size) {
+    setServices(Array.from(servicesRef.current));
+  }
+  if (methods.length !== methodsRef.current.size) {
+    setMethods(Array.from(methodsRef.current));
+  }
+
+  const columns = useMemo(() => {
+    return generateColumns(FilterContext, setFilters, services, methods);
+  }, [setFilters, services, methods]);
+
+  const filteredRows = useMemo(() => {
+    return messages
+      .map((msg, index) => {
+        msg.id = index;
+        return msg;
+      })
+      .filter((r) => {
+        return (
+          (filters.type ? r.type && r.type === filters.type : true) &&
+          (filters.service
+            ? r.service && r.service === filters.service
+            : true) &&
+          (filters.method ? r.method && r.method === filters.method : true) &&
+          (filters.send ? r.send && r.send.includes(filters.send) : true) &&
+          (filters.receive
+            ? r.receive && r.receive.includes(filters.receive)
+            : true)
+        );
+      });
+  }, [messages, filters]);
+
   const addMessages = () => {
     getMessages()
       .then((newRawMessages) => {
-        let newMessagesLength = 0;
+        let newMsgs = [];
 
+        // since addMessages is called from setInterval, if we read messages
+        // directly we will always get an empty array. use setMessages to get
+        // the latest messages (oldMessages) instead.
         setMessages((oldMessages) => {
           const { updatedMessages, newMessages } = updateMessages(
             oldMessages,
             newRawMessages
           );
-          newMessagesLength = newMessages.length;
+          newMsgs = newMessages;
           return [...updatedMessages, ...newMessages];
         });
 
-        if (newMessagesLength > 0) {
-          setBottomRow((oldBottomRow) => oldBottomRow + newMessagesLength);
+        if (newMsgs.length > 0) {
+          // add to filter options set
+          newMsgs.forEach((msg) => {
+            servicesRef.current.add(msg.service);
+            methodsRef.current.add(msg.method);
+          });
+
+          // for auto scroll
+          setBottomRow((oldBottomRow) => oldBottomRow + newMsgs.length);
         }
       })
       .catch((error) => {
@@ -164,23 +112,12 @@ const MessagesTab = () => {
 
   const clearMessages = () => {
     setMessages([]);
+    // should also clear filter options
+    setServices([]);
+    setMethods([]);
+    servicesRef.current.clear();
+    methodsRef.current.clear();
   };
-
-  const filteredRows = useMemo(() => {
-    return messages
-      .map((msg, index) => {
-        msg.id = index;
-        return msg;
-      })
-      .filter((r) => {
-        return (
-          (filters.send ? r.send && r.send.includes(filters.send) : true) &&
-          (filters.receive
-            ? r.receive && r.receive.includes(filters.receive)
-            : true)
-        );
-      });
-  }, [messages, filters]);
 
   const toggleCapturing = () => {
     if (capturing === true) {
@@ -220,6 +157,9 @@ const MessagesTab = () => {
 
   const clearFilters = () => {
     setFilters({
+      type: '',
+      service: '',
+      method: '',
       send: '',
       receive: '',
       enabled: filters.enabled ? true : false,
@@ -261,7 +201,9 @@ const MessagesTab = () => {
       </div>
       <FilterContext.Provider value={filters}>
         <DataGrid
-          className={`rdg-light ${filters.enabled ? 'filter-container' : undefined}`}
+          className={`rdg-light ${
+            filters.enabled ? 'filter-container' : undefined
+          }`}
           style={{ fontSize: '10px', height: 'calc(100vh - 40px' }}
           ref={gridRef}
           columns={columns}
