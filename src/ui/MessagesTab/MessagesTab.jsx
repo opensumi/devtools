@@ -222,7 +222,7 @@ const MessagesTab = () => {
     setFilters({
       send: '',
       receive: '',
-      enabled: true,
+      enabled: filters.enabled ? true : false,
     });
   };
 
