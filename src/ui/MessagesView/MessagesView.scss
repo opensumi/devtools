@@ -3,7 +3,6 @@
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 5px;
-  margin-bottom: 5px;
 }
 
 .toolbar-button {
@@ -81,6 +80,27 @@
 
 .icon-reset {
   background: url('./buttonIcons/reset.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-expand-all {
+  background: url('./buttonIcons/expand_all.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-collapse-all {
+  background: url('./buttonIcons/collapse_all.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-braces {
+  background: url('./buttonIcons/braces.svg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

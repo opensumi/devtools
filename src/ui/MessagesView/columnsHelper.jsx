@@ -30,21 +30,19 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       name: 'ID',
       minWidth: 40,
       width: 50,
-      // frozen: true,
+      frozen: true,
     },
     {
       key: 'time',
       name: 'Time',
       minWidth: 75,
       width: 75,
-      // frozen: true,
     },
     {
       key: 'type',
       name: 'Type',
       minWidth: 40,
       width: 50,
-      // frozen: true,
       headerCellClass: 'filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
@@ -71,7 +69,6 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       key: 'service',
       name: 'Service',
       width: 100,
-      // frozen: true,
       headerCellClass: 'filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
@@ -101,7 +98,6 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       key: 'method',
       name: 'Method',
       width: 100,
-      // frozen: true,
       headerCellClass: 'filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>

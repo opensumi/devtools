@@ -1,0 +1,39 @@
+table.rt-table {
+  width: 100%;
+  height: auto;
+  display: grid;
+  overflow: auto;
+  grid-template-columns:
+    minmax(150px, 7fr)
+    minmax(150px, 3fr);
+
+    overflow: hidden;
+
+  thead,
+  tr {
+    display: contents;
+  }
+
+  td {
+    position: relative;
+  }
+}
+
+.rt-handle {
+  display: block;
+  position: absolute;
+  cursor: col-resize;
+  width: 7px;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  border-right: 2px solid transparent;
+
+  &:hover {
+    border-color: #ccc;
+  }
+
+  &.active {
+    border-color: #517ea5;
+  }
+}
