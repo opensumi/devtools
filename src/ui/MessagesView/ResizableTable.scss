@@ -1,13 +1,15 @@
 table.rt-table {
   width: 100%;
   height: auto;
+  border-top: 1px solid #cacdd1;
+  border-bottom: 1px solid #cacdd1;
   display: grid;
   overflow: auto;
   grid-template-columns:
     minmax(150px, 7fr)
     minmax(150px, 3fr);
 
-    overflow: hidden;
+  overflow: hidden;
 
   thead,
   tr {
@@ -16,7 +18,12 @@ table.rt-table {
 
   td {
     position: relative;
+    padding: 0;
   }
+}
+
+#rt-td1 {
+  border-right: 1px solid #cacdd1;
 }
 
 .rt-handle {
@@ -29,11 +36,11 @@ table.rt-table {
   z-index: 1;
   border-right: 2px solid transparent;
 
-  &:hover {
-    border-color: #ccc;
-  }
+  // &:hover {
+  //   border-color: #ccc;
+  // }
 
-  &.active {
-    border-color: #517ea5;
-  }
+  // &.active {
+  //   border-color: #1a73e8;
+  // }
 }

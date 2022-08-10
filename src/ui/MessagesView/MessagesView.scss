@@ -1,5 +1,6 @@
 .toolbar {
   display: flex;
+  margin: 5px;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 5px;
@@ -104,6 +105,28 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+}
+
+.rdg {
+  border: 0;
+}
+
+.rdg-header-cell {
+  font-size: 11px;
+  font-weight: normal;
+  background-color: #f1f3f4;
+  border-color: #cacdd1;
+}
+
+.rdg-body-cell {
+  font-size: 11px;
+  font-family: monospace;
+  border-bottom: 0;
+  border-color: #cacdd1;
+
+  &.column-type {
+    text-align: center;
+  }
 }
 
 .filter-container {

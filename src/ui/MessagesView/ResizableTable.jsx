@@ -48,7 +48,7 @@ const ResizableTable = ({ children }) => {
     <table className="rt-table" ref={tableElement}>
       <thead>
         <tr>
-          <td ref={ref1}>
+          <td id="rt-td1" ref={ref1}>
             {children[0]}
             <div
               style={{ height: tableHeight }}

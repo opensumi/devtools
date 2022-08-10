@@ -30,6 +30,8 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       name: 'ID',
       minWidth: 40,
       width: 50,
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell',
       frozen: true,
     },
     {
@@ -37,13 +39,16 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       name: 'Time',
       minWidth: 75,
       width: 75,
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell',
     },
     {
       key: 'type',
       name: 'Type',
       minWidth: 40,
       width: 50,
-      headerCellClass: 'filter-cell',
+      cellClass: 'rdg-body-cell column-type',
+      headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
           {({ filters, ...rest }) => (
@@ -69,7 +74,8 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       key: 'service',
       name: 'Service',
       width: 100,
-      headerCellClass: 'filter-cell',
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
           {({ filters, ...rest }) => (
@@ -98,7 +104,8 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       key: 'method',
       name: 'Method',
       width: 100,
-      headerCellClass: 'filter-cell',
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
           {({ filters, ...rest }) => (
@@ -126,7 +133,8 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
     {
       key: 'send',
       name: 'Send',
-      headerCellClass: 'filter-cell',
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
           {({ filters, ...rest }) => (
@@ -146,7 +154,8 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
     {
       key: 'receive',
       name: 'Receive',
-      headerCellClass: 'filter-cell',
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
           {({ filters, ...rest }) => (

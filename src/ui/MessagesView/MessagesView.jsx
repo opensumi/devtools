@@ -8,7 +8,7 @@ import React, {
 import ResizableTable from './ResizableTable';
 import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import './react-tabs.scss';
 import JsonView from 'react-json-view';
 import { startCapturing, stopCapturing, getMessages } from '../../capturer';
 import { updateMessages, getParsedMessage } from './messagesHelper';
@@ -184,7 +184,7 @@ const MessagesView = () => {
 
   return (
     <div>
-      <div className="toolbar" style={{ marginBottom: '5px' }}>
+      <div className="toolbar">
         <button
           className={`toolbar-button ${capturing ? 'active' : ''}`}
           onClick={toggleCapturing}
@@ -221,7 +221,7 @@ const MessagesView = () => {
             className={`rdg-light ${
               filters.enabled ? 'filter-container' : undefined
             }`}
-            style={{ fontSize: '10px', height: 'calc(100vh - 42px)' }}
+            style={{ height: 'calc(100vh - 37px)' }}
             ref={gridRef}
             columns={columns}
             rows={filteredRows}
@@ -243,7 +243,7 @@ const MessagesView = () => {
             <TabPanel>
               <JsonView
                 style={{
-                  height: 'calc(100vh - 102px)',
+                  height: 'calc(100vh - 96px)',
                   overflow: 'auto',
                 }}
                 src={getParsedMessage(
@@ -260,7 +260,7 @@ const MessagesView = () => {
             <TabPanel>
               <JsonView
                 style={{
-                  height: 'calc(100vh - 102px)',
+                  height: 'calc(100vh - 96px)',
                   overflow: 'auto',
                 }}
                 src={getParsedMessage(
