@@ -42,11 +42,26 @@ const MessagesView = () => {
     send: 0, // the unit is bytes/s
     receive: 0,
   });
+  const [isCompact, setIsCompact] = useState(false);
 
   const timer = useRef(null);
+  const statbarRef = useRef(null);
   const gridRef = useRef(null);
   const servicesRef = useRef(new Set()); // we need ref to get old values in all renders
   const methodsRef = useRef(new Set());
+
+  const setCompactMode = () => {
+    if (statbarRef.current.offsetWidth < 600) {
+      setIsCompact(true);
+    } else {
+      setIsCompact(false);
+    }
+  };
+
+  useEffect(() => {
+    setCompactMode();
+    window.addEventListener('resize', setCompactMode);
+  }, []);
 
   // run if autoScroll or bottomRow changes
   useEffect(() => {
@@ -203,36 +218,36 @@ const MessagesView = () => {
 
   return (
     <div>
-      <div className="statbar">
+      <div ref={statbarRef} className="statbar">
         <div className="toolbar">
           <button
             className={`toolbar-button ${capturing ? 'active' : ''}`}
             onClick={toggleCapturing}
           >
             <span className="toolbar-icon icon-record"></span>
-            Capture
+            {isCompact ? null : <span className="toolbar-text">Capture</span>}
           </button>
           <button className="toolbar-button" onClick={clearMessages}>
             <span className="toolbar-icon icon-clear"></span>
-            Clear
+            {isCompact ? null : <span className="toolbar-text">Clear</span>}
           </button>
           <button
             className={`toolbar-button ${autoScroll ? 'active' : ''}`}
             onClick={toggleAutoScroll}
           >
             <span className="toolbar-icon icon-bottom"></span>
-            Scroll
+            {isCompact ? null : <span className="toolbar-text">Scroll</span>}
           </button>
           <button
             className={`toolbar-button ${filters.enabled ? 'active' : ''}`}
             onClick={toggleFilters}
           >
             <span className="toolbar-icon icon-filter"></span>
-            Filters
+            {isCompact ? null : <span className="toolbar-text">Filters</span>}
           </button>
           <button className="toolbar-button" onClick={clearFilters}>
             <span className="toolbar-icon icon-reset"></span>
-            Reset Filters
+            {isCompact ? null : <span className="toolbar-text">Reset Filters</span>}
           </button>
           <button
             className={`toolbar-button ${
@@ -241,7 +256,7 @@ const MessagesView = () => {
             onClick={toggleShouldParseExtProtocol}
           >
             <span className="toolbar-icon icon-braces"></span>
-            Parse ExtProtocol
+            {isCompact ? null : <span className="toolbar-text">Parse ExtProtocol</span>}
           </button>
         </div>
         <div className="netbar">

@@ -6,7 +6,7 @@ table.rt-table {
   display: grid;
   overflow: auto;
   grid-template-columns:
-    minmax(150px, 7fr)
+    minmax(50px, 7fr)
     minmax(150px, 3fr);
 
   overflow: hidden;
