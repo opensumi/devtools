@@ -7,6 +7,9 @@
     margin: 0 0 5px;
     padding: 0;
     background-color: #f1f3f4;
+    // disable text selection
+    -webkit-user-select: none; /* Safari */
+    user-select: none; /* Standard syntax */
   }
 
   &__tab {

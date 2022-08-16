@@ -14,6 +14,7 @@ import { startCapturing, stopCapturing, getMessages } from '../../capturer';
 import { updateMessages, getParsedMessage } from './messagesHelper';
 import { generateColumns } from './columnsHelper';
 import './MessagesView.scss';
+import NetSpeedView from './NetSpeedView';
 
 const INTERVAL = 500;
 
@@ -37,6 +38,10 @@ const MessagesView = () => {
   const [selectedRow, setSelectedRow] = useState();
   const [shouldParseExtProtocol, setShouldParseExtProtocol] = useState(false);
   const [collapsed, setCollapsed] = useState(1);
+  const [netspeed, setNetspeed] = useState({
+    send: 0, // the unit is bytes/s
+    receive: 0,
+  });
 
   const timer = useRef(null);
   const gridRef = useRef(null);
@@ -92,16 +97,18 @@ const MessagesView = () => {
     getMessages()
       .then((newRawMessages) => {
         let newMsgs = [];
+        let newSendBytes = 0;
+        let newReceiveBytes = 0;
 
         // since addMessages is called from setInterval, if we read messages
         // directly we will always get an empty array. use setMessages to get
         // the latest messages (oldMessages) instead.
         setMessages((oldMessages) => {
-          const { updatedMessages, newMessages } = updateMessages(
-            oldMessages,
-            newRawMessages
-          );
+          const { updatedMessages, newMessages, sendBytes, receiveBytes } =
+            updateMessages(oldMessages, newRawMessages);
           newMsgs = newMessages;
+          newSendBytes = sendBytes;
+          newReceiveBytes = receiveBytes;
           return [...updatedMessages, ...newMessages];
         });
 
@@ -115,6 +122,12 @@ const MessagesView = () => {
           // for auto scroll
           setBottomRow((oldBottomRow) => oldBottomRow + newMsgs.length);
         }
+
+        // caculate net speed
+        setNetspeed({
+          send: newSendBytes / (INTERVAL / 1000),
+          receive: newReceiveBytes / (INTERVAL / 1000),
+        });
       })
       .catch((error) => {
         console.error('Getting messages failed!');
@@ -138,6 +151,10 @@ const MessagesView = () => {
           setCapturing(false);
           clearInterval(timer.current);
           timer.current = null;
+          setNetspeed({
+            send: 0,
+            receive: 0,
+          });
         })
         .catch((error) => {
           console.error('Stoping capturing failed!');
@@ -184,36 +201,41 @@ const MessagesView = () => {
 
   return (
     <div>
-      <div className="toolbar">
-        <button
-          className={`toolbar-button ${capturing ? 'active' : ''}`}
-          onClick={toggleCapturing}
-        >
-          <span className="toolbar-icon icon-record"></span>
-          Capture
-        </button>
-        <button className="toolbar-button" onClick={clearMessages}>
-          <span className="toolbar-icon icon-clear"></span>
-          Clear
-        </button>
-        <button
-          className={`toolbar-button ${autoScroll ? 'active' : ''}`}
-          onClick={toggleAutoScroll}
-        >
-          <span className="toolbar-icon icon-bottom"></span>
-          Scroll
-        </button>
-        <button
-          className={`toolbar-button ${filters.enabled ? 'active' : ''}`}
-          onClick={toggleFilters}
-        >
-          <span className="toolbar-icon icon-filter"></span>
-          Filters
-        </button>
-        <button className="toolbar-button" onClick={clearFilters}>
-          <span className="toolbar-icon icon-reset"></span>
-          Reset Filters
-        </button>
+      <div className="statbar">
+        <div className="toolbar">
+          <button
+            className={`toolbar-button ${capturing ? 'active' : ''}`}
+            onClick={toggleCapturing}
+          >
+            <span className="toolbar-icon icon-record"></span>
+            Capture
+          </button>
+          <button className="toolbar-button" onClick={clearMessages}>
+            <span className="toolbar-icon icon-clear"></span>
+            Clear
+          </button>
+          <button
+            className={`toolbar-button ${autoScroll ? 'active' : ''}`}
+            onClick={toggleAutoScroll}
+          >
+            <span className="toolbar-icon icon-bottom"></span>
+            Scroll
+          </button>
+          <button
+            className={`toolbar-button ${filters.enabled ? 'active' : ''}`}
+            onClick={toggleFilters}
+          >
+            <span className="toolbar-icon icon-filter"></span>
+            Filters
+          </button>
+          <button className="toolbar-button" onClick={clearFilters}>
+            <span className="toolbar-icon icon-reset"></span>
+            Reset Filters
+          </button>
+        </div>
+        <div className="netbar">
+          <NetSpeedView capturing={capturing} upload={netspeed.send} download={netspeed.receive} />
+        </div>
       </div>
       <ResizableTable>
         <FilterContext.Provider value={filters}>
@@ -243,8 +265,9 @@ const MessagesView = () => {
             <TabPanel>
               <JsonView
                 style={{
-                  height: 'calc(100vh - 96px)',
+                  height: 'calc(100vh - 92px)',
                   overflow: 'auto',
+                  fontSize: '12px',
                 }}
                 src={getParsedMessage(
                   selectedRow,
@@ -260,8 +283,9 @@ const MessagesView = () => {
             <TabPanel>
               <JsonView
                 style={{
-                  height: 'calc(100vh - 96px)',
+                  height: 'calc(100vh - 92px)',
                   overflow: 'auto',
+                  fontSize: '12px',
                 }}
                 src={getParsedMessage(
                   selectedRow,

@@ -7,6 +7,8 @@ const serviceMethodSplit = (serviceMethod) => {
 
 const updateMessages = (oldMessages, newRawMessages) => {
   const newMessages = [];
+  let sendBytes = 0;
+  let receiveBytes = 0;
 
   // if new message is requestResult/onRequestResult
   // the corresponding sendRequest/onRequest row should be updated
@@ -63,6 +65,15 @@ const updateMessages = (oldMessages, newRawMessages) => {
       } else if (msg.status === 'fail') {
         msg.send = JSON.stringify(message.error);
       }
+    }
+
+    // total send/receive bytes of new messages
+    // for caculating the net speeds
+    if (msg.send) {
+      sendBytes += new Blob([msg.send]).size;
+    }
+    if (msg.receive) {
+      receiveBytes += new Blob([msg.receive]).size;
     }
 
     if (msg.type === '↑↓') {
@@ -137,6 +148,8 @@ const updateMessages = (oldMessages, newRawMessages) => {
   return {
     updatedMessages,
     newMessages,
+    sendBytes,
+    receiveBytes,
   };
 };
 
