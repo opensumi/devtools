@@ -37,7 +37,6 @@ const MessagesView = () => {
   const [methods, setMethods] = useState([]); // all kinds of methods in messages
   const [selectedRow, setSelectedRow] = useState();
   const [shouldParseExtProtocol, setShouldParseExtProtocol] = useState(false);
-  const [collapsed, setCollapsed] = useState(1);
   const [netspeed, setNetspeed] = useState({
     send: 0, // the unit is bytes/s
     receive: 0,
@@ -52,11 +51,6 @@ const MessagesView = () => {
   useEffect(() => {
     gridRef.current && autoScroll && gridRef.current.scrollToRow(bottomRow);
   }, [autoScroll, bottomRow]);
-
-  // reset JsonView's collapsed to 1 when selected row change
-  useEffect(() => {
-    setCollapsed(1);
-  }, [selectedRow]);
 
   // it is not very elegent to use two variables to store same thing
   // but can prevent unnecessary render that will disrupt users when
@@ -199,6 +193,12 @@ const MessagesView = () => {
     setShouldParseExtProtocol(!shouldParseExtProtocol);
   };
 
+  const rjvStyles = {
+    height: 'calc(100vh - 60px)',
+    overflow: 'auto',
+    fontSize: '12px',
+  };
+
   return (
     <div>
       <div className="statbar">
@@ -232,9 +232,22 @@ const MessagesView = () => {
             <span className="toolbar-icon icon-reset"></span>
             Reset Filters
           </button>
+          <button
+            className={`toolbar-button ${
+              shouldParseExtProtocol ? 'active' : ''
+            }`}
+            onClick={toggleShouldParseExtProtocol}
+          >
+            <span className="toolbar-icon icon-braces"></span>
+            Parse ExtProtocol
+          </button>
         </div>
         <div className="netbar">
-          <NetSpeedView capturing={capturing} upload={netspeed.send} download={netspeed.receive} />
+          <NetSpeedView
+            capturing={capturing}
+            upload={netspeed.send}
+            download={netspeed.receive}
+          />
         </div>
       </div>
       <ResizableTable>
@@ -243,7 +256,7 @@ const MessagesView = () => {
             className={`rdg-light ${
               filters.enabled ? 'filter-container' : undefined
             }`}
-            style={{ height: 'calc(100vh - 37px)' }}
+            style={{ height: 'calc(100vh - 30px)' }}
             ref={gridRef}
             columns={columns}
             rows={filteredRows}
@@ -264,72 +277,33 @@ const MessagesView = () => {
 
             <TabPanel>
               <JsonView
-                style={{
-                  height: 'calc(100vh - 92px)',
-                  overflow: 'auto',
-                  fontSize: '12px',
-                }}
+                style={rjvStyles}
                 src={getParsedMessage(
                   selectedRow,
                   'send',
                   shouldParseExtProtocol
                 )}
                 name={false}
-                collapsed={collapsed}
+                collapsed={1}
                 displayDataTypes={false}
                 enableClipboard={false}
               />
             </TabPanel>
             <TabPanel>
               <JsonView
-                style={{
-                  height: 'calc(100vh - 92px)',
-                  overflow: 'auto',
-                  fontSize: '12px',
-                }}
+                style={rjvStyles}
                 src={getParsedMessage(
                   selectedRow,
                   'receive',
                   shouldParseExtProtocol
                 )}
                 name={false}
-                collapsed={collapsed}
+                collapsed={1}
                 displayDataTypes={false}
                 enableClipboard={false}
               />
             </TabPanel>
           </Tabs>
-          <div className="toolbar">
-            <button
-              className="toolbar-button"
-              onClick={() => {
-                setCollapsed(false);
-              }}
-            >
-              <span className="toolbar-icon icon-expand-all"></span>
-              Expand
-            </button>
-            <button
-              className="toolbar-button"
-              onClick={() => {
-                setCollapsed(true);
-              }}
-            >
-              <span className="toolbar-icon icon-collapse-all"></span>
-              Collapse
-            </button>
-            {selectedRow && selectedRow.service === 'ExtProtocol' ? (
-              <button
-                className={`toolbar-button ${
-                  shouldParseExtProtocol ? 'active' : ''
-                }`}
-                onClick={toggleShouldParseExtProtocol}
-              >
-                <span className="toolbar-icon icon-braces"></span>
-                Parse ExtProtocol
-              </button>
-            ) : null}
-          </div>
         </div>
       </ResizableTable>
     </div>
