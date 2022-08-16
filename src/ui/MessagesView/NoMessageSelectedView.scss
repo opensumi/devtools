@@ -1,0 +1,17 @@
+.empty-view {
+  position: relative;
+  height: calc(100vh - 60px);
+  color: rgb(95, 99, 104);
+  text-align: center;
+  min-width: 70px;
+}
+
+.empty-bold-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  font-weight: 700;
+}

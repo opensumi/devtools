@@ -15,6 +15,7 @@ import { updateMessages, getParsedMessage } from './messagesHelper';
 import { generateColumns } from './columnsHelper';
 import './MessagesView.scss';
 import NetSpeedView from './NetSpeedView';
+import NoMessageSelectedView from './NoMessageSelectedView';
 
 const INTERVAL = 500;
 
@@ -136,6 +137,7 @@ const MessagesView = () => {
     setMethods([]);
     servicesRef.current.clear();
     methodsRef.current.clear();
+    setSelectedRow(null);
   };
 
   const toggleCapturing = () => {
@@ -276,32 +278,40 @@ const MessagesView = () => {
             </TabList>
 
             <TabPanel>
-              <JsonView
-                style={rjvStyles}
-                src={getParsedMessage(
-                  selectedRow,
-                  'send',
-                  shouldParseExtProtocol
-                )}
-                name={false}
-                collapsed={1}
-                displayDataTypes={false}
-                enableClipboard={false}
-              />
+              {selectedRow ? (
+                <JsonView
+                  style={rjvStyles}
+                  src={getParsedMessage(
+                    selectedRow,
+                    'send',
+                    shouldParseExtProtocol
+                  )}
+                  name={false}
+                  collapsed={1}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                />
+              ) : (
+                <NoMessageSelectedView />
+              )}
             </TabPanel>
             <TabPanel>
-              <JsonView
-                style={rjvStyles}
-                src={getParsedMessage(
-                  selectedRow,
-                  'receive',
-                  shouldParseExtProtocol
-                )}
-                name={false}
-                collapsed={1}
-                displayDataTypes={false}
-                enableClipboard={false}
-              />
+              {selectedRow ? (
+                <JsonView
+                  style={rjvStyles}
+                  src={getParsedMessage(
+                    selectedRow,
+                    'receive',
+                    shouldParseExtProtocol
+                  )}
+                  name={false}
+                  collapsed={1}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                />
+              ) : (
+                <NoMessageSelectedView />
+              )}
             </TabPanel>
           </Tabs>
         </div>
