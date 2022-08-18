@@ -10,14 +10,20 @@ import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './react-tabs.scss';
 import JsonView from 'react-json-view';
-import { startCapturing, stopCapturing, getMessages } from '../../capturer';
+import {
+  startCapturing,
+  stopCapturing,
+  getMessages,
+  getLatency,
+} from '../../capturer';
 import { updateMessages, getParsedMessage } from './messagesHelper';
 import { generateColumns } from './columnsHelper';
 import './MessagesView.scss';
-import NetSpeedView from './NetSpeedView';
 import NoMessageSelectedView from './NoMessageSelectedView';
+import NetSpeedView from './NetSpeedView';
+import NetLatencyView from './NetLatencyView';
 
-const INTERVAL = 500;
+const INTERVAL = 1000;
 
 const FilterContext = createContext(undefined);
 
@@ -42,6 +48,7 @@ const MessagesView = () => {
     send: 0, // the unit is bytes/s
     receive: 0,
   });
+  const [latency, setLatency] = useState(null);
   const [isCompact, setIsCompact] = useState(false);
 
   const timer = useRef(null);
@@ -61,6 +68,7 @@ const MessagesView = () => {
   useEffect(() => {
     setCompactMode();
     window.addEventListener('resize', setCompactMode);
+    toggleCapturing();
   }, []);
 
   // run if autoScroll or bottomRow changes
@@ -155,6 +163,17 @@ const MessagesView = () => {
     setSelectedRow(null);
   };
 
+  const updateLatency = () => {
+    getLatency()
+      .then((latency) => {
+        setLatency(latency);
+      })
+      .catch((error) => {
+        console.error('Getting latency failed!');
+        console.error(error.stack || error);
+      });
+  };
+
   const toggleCapturing = () => {
     if (capturing === true) {
       stopCapturing()
@@ -166,6 +185,7 @@ const MessagesView = () => {
             send: 0,
             receive: 0,
           });
+          setLatency(null);
         })
         .catch((error) => {
           console.error('Stoping capturing failed!');
@@ -175,7 +195,10 @@ const MessagesView = () => {
       startCapturing()
         .then(() => {
           setCapturing(true);
-          timer.current = setInterval(() => addMessages(), INTERVAL);
+          timer.current = setInterval(() => {
+            addMessages();
+            updateLatency();
+          }, INTERVAL);
         })
         .catch((error) => {
           console.error('Starting capturing failed!');
@@ -247,7 +270,9 @@ const MessagesView = () => {
           </button>
           <button className="toolbar-button" onClick={clearFilters}>
             <span className="toolbar-icon icon-reset"></span>
-            {isCompact ? null : <span className="toolbar-text">Reset Filters</span>}
+            {isCompact ? null : (
+              <span className="toolbar-text">Reset Filters</span>
+            )}
           </button>
           <button
             className={`toolbar-button ${
@@ -256,7 +281,9 @@ const MessagesView = () => {
             onClick={toggleShouldParseExtProtocol}
           >
             <span className="toolbar-icon icon-braces"></span>
-            {isCompact ? null : <span className="toolbar-text">Parse ExtProtocol</span>}
+            {isCompact ? null : (
+              <span className="toolbar-text">Parse ExtProtocol</span>
+            )}
           </button>
         </div>
         <div className="netbar">
@@ -265,6 +292,7 @@ const MessagesView = () => {
             upload={netspeed.send}
             download={netspeed.receive}
           />
+          <NetLatencyView capturing={capturing} latency={latency} />
         </div>
       </div>
       <ResizableTable>

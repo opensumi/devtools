@@ -17,14 +17,13 @@ const startCapturing = () => {
       const msg = {
         time: new Date().toLocaleString().split(' ')[1],
         type: message.type,
+        serviceMethod: message.serviceMethod,
       };
 
       if (msg.type === 'sendNotification') {
-        msg.serviceMethod = message.serviceMethod;
         msg.arguments = message.arguments;
       } else if (msg.type === 'sendRequest') {
         msg.requestId = message.requestId;
-        msg.serviceMethod = message.serviceMethod;
         msg.arguments = message.arguments;
       } else if (msg.type === 'requestResult') {
         msg.requestId = message.requestId;
@@ -35,11 +34,9 @@ const startCapturing = () => {
           msg.error = message.error;
         }
       } else if (msg.type === 'onNotification') {
-        msg.serviceMethod = message.serviceMethod;
         msg.arguments = message.arguments;
       } else if (msg.type === 'onRequest') {
         msg.requestId = message.requestId;
-        msg.serviceMethod = message.serviceMethod;
         msg.arguments = message.arguments;
       } else if (msg.type === 'onRequestResult') {
         msg.requestId = message.requestId;
@@ -62,6 +59,8 @@ const stopCapturing = () => {
       delete window.__opensumi_devtools.messages;
     if (window.__opensumi_devtools.capture)
       delete window.__opensumi_devtools.capture;
+    if (window.__opensumi_devtools.latency)
+      delete window.__opensumi_devtools.latency;
   });
 };
 
@@ -79,4 +78,12 @@ const getMessages = () => {
   });
 };
 
-export { startCapturing, stopCapturing, getMessages };
+const getLatency = () => {
+  return evalInWindow(() => {
+    return window.__opensumi_devtools.latency;
+  }).then((latency) => {
+    return latency;
+  });
+};
+
+export { startCapturing, stopCapturing, getMessages, getLatency };

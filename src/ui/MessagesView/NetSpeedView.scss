@@ -1,21 +1,8 @@
-.netspeed-container {
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(225, 236, 244, 1) 100%
-  );
-  // disable text selection
-  -webkit-user-select: none; /* Safari */
-  user-select: none; /* Standard syntax */
-}
-
-.netspeed-content {
+.netspeed {
   width: 90px;
   color: #39739d;
   font-size: 12px;
-  transform: scale(0.8) translateX(7px);
+  transform: scale(0.8) translateX(16px);
   text-align: right;
 }
 

@@ -20,6 +20,16 @@
   justify-content: flex-end;
   flex-wrap: nowrap;
   gap: 5px;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(225, 236, 244, 1) 100%
+  );
+  // disable text selection
+  -webkit-user-select: none; /* Safari */
+  user-select: none; /* Standard syntax */
 }
 
 .toolbar-button {
