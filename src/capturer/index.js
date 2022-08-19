@@ -14,6 +14,13 @@ const startCapturing = () => {
     window.__opensumi_devtools.capture = (message) => {
       if (window.__opensumi_devtools.evaling) return;
 
+      // if the length of messages is greater than 9999, devtools window
+      // is regarded to be closed in capturing state. So stop capturing.
+      if (window.__opensumi_devtools.messages.length > 9999) {
+        window.__opensumi_devtools = undefined;
+        return;
+      }
+
       const msg = {
         time: new Date().toLocaleString().split(' ')[1],
         type: message.type,
@@ -67,6 +74,7 @@ const stopCapturing = () => {
 const getMessages = () => {
   return evalInWindow(() => {
     const messages = window.__opensumi_devtools.messages;
+    // clear messages after getting them each time
     if (messages) window.__opensumi_devtools.messages = [];
     return messages;
   }).then((messages) => {
