@@ -54,17 +54,17 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
           {({ filters, ...rest }) => (
             <select
               {...rest}
-              className="filter"
+              className='filter'
               value={filters.type}
               onChange={(e) => {
                 setFilters({ ...filters, type: e.target.value });
               }}
             >
-              <option value="">All</option>
-              <option value="↑">↑</option>
-              <option value="↓">↓</option>
-              <option value="↑↓">↑↓</option>
-              <option value="↓↑">↓↑</option>
+              <option value=''>All</option>
+              <option value='↑'>↑</option>
+              <option value='↓'>↓</option>
+              <option value='↑↓'>↑↓</option>
+              <option value='↓↑'>↓↑</option>
             </select>
           )}
         </FilterRenderer>
@@ -81,13 +81,13 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
           {({ filters, ...rest }) => (
             <select
               {...rest}
-              className="filter"
+              className='filter'
               value={filters.service}
               onChange={(e) => {
                 setFilters({ ...filters, service: e.target.value });
               }}
             >
-              <option value="">All</option>
+              <option value=''>All</option>
               {Array.from(services)
                 .sort()
                 .map((s) => (
@@ -111,13 +111,13 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
           {({ filters, ...rest }) => (
             <select
               {...rest}
-              className="filter"
+              className='filter'
               value={filters.method}
               onChange={(e) => {
                 setFilters({ ...filters, method: e.target.value });
               }}
             >
-              <option value="">All</option>
+              <option value=''>All</option>
               {Array.from(methods)
                 .sort()
                 .map((m) => (
@@ -140,7 +140,7 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
           {({ filters, ...rest }) => (
             <input
               {...rest}
-              className="filter"
+              className='filter'
               value={filters.send}
               onChange={(e) => {
                 setFilters({ ...filters, send: e.target.value });
@@ -161,7 +161,7 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
           {({ filters, ...rest }) => (
             <input
               {...rest}
-              className="filter"
+              className='filter'
               value={filters.receive}
               onChange={(e) => {
                 setFilters({ ...filters, receive: e.target.value });

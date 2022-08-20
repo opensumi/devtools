@@ -15,7 +15,7 @@ es.addEventListener(
   () => {
     logger('SSE service connected!');
   },
-  false
+  false,
 );
 
 es.addEventListener(
@@ -27,7 +27,7 @@ es.addEventListener(
       console.error(event);
     }
   },
-  false
+  false,
 );
 
 es.addEventListener('background-updated', () => {
@@ -57,10 +57,10 @@ es.addEventListener(
               logger('extension will reload to update content scripts...');
               chrome.runtime.reload();
             }
-          }
+          },
         );
       });
     });
   },
-  false
+  false,
 );

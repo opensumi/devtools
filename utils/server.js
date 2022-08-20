@@ -22,26 +22,18 @@ for (let entryName in config.entry) {
     ].concat(config.entry[entryName]);
   }
 }
-if (
-  customOptions.enableBackgroundAutoReload ||
-  customOptions.enableContentScriptsAutoReload
-) {
+if (customOptions.enableBackgroundAutoReload || customOptions.enableContentScriptsAutoReload) {
   config.entry['background'] = [
-    path.resolve(
-      __dirname,
-      `autoReloadClients/backgroundClient.js?port=${env.PORT}`
-    ),
+    path.resolve(__dirname, `autoReloadClients/backgroundClient.js?port=${env.PORT}`),
   ].concat(config.entry['background']);
 }
 if (customOptions.enableContentScriptsAutoReload) {
-  config.entry['contentScript'] = [
-    path.resolve(__dirname, 'autoReloadClients/contentScriptClient.js'),
-  ].concat(config.entry['contentScript']);
+  config.entry['contentScript'] = [path.resolve(__dirname, 'autoReloadClients/contentScriptClient.js')].concat(
+    config.entry['contentScript'],
+  );
 }
 
-config.plugins = [new webpack.HotModuleReplacementPlugin()].concat(
-  config.plugins || []
-);
+config.plugins = [new webpack.HotModuleReplacementPlugin()].concat(config.plugins || []);
 
 delete config.custom;
 
@@ -69,10 +61,7 @@ const server = new WebpackDevServer(
     // the following option really matters!
     setupMiddlewares: (middlewares, devServer) => {
       // if auto-reload is not needed, this middleware is not needed.
-      if (
-        !customOptions.enableBackgroundAutoReload &&
-        !customOptions.enableContentScriptsAutoReload
-      ) {
+      if (!customOptions.enableBackgroundAutoReload && !customOptions.enableContentScriptsAutoReload) {
         return middlewares;
       }
 
@@ -95,30 +84,20 @@ const server = new WebpackDevServer(
           const compileDoneHook = debounce((stats) => {
             const { modules } = stats.toJson({ all: false, modules: true });
             const updatedJsModules = modules.filter(
-              (module) =>
-                module.type === 'module' &&
-                module.moduleType === 'javascript/auto'
+              (module) => module.type === 'module' && module.moduleType === 'javascript/auto',
             );
 
             const isBackgroundUpdated = updatedJsModules.some((module) =>
-              module.nameForCondition.startsWith(
-                path.resolve(__dirname, '../src/pages/Background')
-              )
+              module.nameForCondition.startsWith(path.resolve(__dirname, '../src/pages/Background')),
             );
             const isContentScriptsUpdated = updatedJsModules.some((module) =>
-              module.nameForCondition.startsWith(
-                path.resolve(__dirname, '../src/pages/ContentScripts')
-              )
+              module.nameForCondition.startsWith(path.resolve(__dirname, '../src/pages/ContentScripts')),
             );
 
             const shouldBackgroundReload =
-              !stats.hasErrors() &&
-              isBackgroundUpdated &&
-              customOptions.enableBackgroundAutoReload;
+              !stats.hasErrors() && isBackgroundUpdated && customOptions.enableBackgroundAutoReload;
             const shouldContentScriptsReload =
-              !stats.hasErrors() &&
-              isContentScriptsUpdated &&
-              customOptions.enableContentScriptsAutoReload;
+              !stats.hasErrors() && isContentScriptsUpdated && customOptions.enableContentScriptsAutoReload;
 
             if (shouldBackgroundReload) {
               sseStream.writeMessage(
@@ -126,7 +105,7 @@ const server = new WebpackDevServer(
                   event: 'background-updated',
                   data: {}, // "data" key should be reserved though it is empty.
                 },
-                'utf-8'
+                'utf-8',
               );
             }
             if (shouldContentScriptsReload) {
@@ -135,7 +114,7 @@ const server = new WebpackDevServer(
                   event: 'content-scripts-updated',
                   data: {},
                 },
-                'utf-8'
+                'utf-8',
               );
             }
           }, 1000);
@@ -160,7 +139,7 @@ const server = new WebpackDevServer(
       return middlewares;
     },
   },
-  compiler
+  compiler,
 );
 
 (async () => {

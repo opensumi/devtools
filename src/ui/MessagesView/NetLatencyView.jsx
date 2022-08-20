@@ -11,7 +11,7 @@ const NetLatencyView = ({ capturing, latency }) => {
   }
 
   return (
-    <div className="netlatency">
+    <div className='netlatency'>
       <div>
         <span>{latency}</span>
       </div>

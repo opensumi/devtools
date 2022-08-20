@@ -70,10 +70,10 @@ const ResizableTable = ({ children }) => {
   }, [onResize]);
 
   return (
-    <table className="rt-table" ref={tableElement}>
+    <table className='rt-table' ref={tableElement}>
       <thead>
         <tr>
-          <td id="rt-td1" ref={ref1}>
+          <td id='rt-td1' ref={ref1}>
             {children[0]}
             <div
               style={{ height: tableHeight }}

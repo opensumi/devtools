@@ -3,8 +3,8 @@ import './NoMessageSelectedView.scss';
 
 const NoMessageSelectedView = () => {
   return (
-    <div className="empty-view">
-      <div className="empty-bold-text">No message selected</div>
+    <div className='empty-view'>
+      <div className='empty-bold-text'>No message selected</div>
     </div>
   );
 };

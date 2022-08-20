@@ -10,6 +10,6 @@ export function useFocusRef(isSelected) {
 
   return {
     ref,
-    tabIndex: isSelected ? 0 : -1
+    tabIndex: isSelected ? 0 : -1,
   };
 }

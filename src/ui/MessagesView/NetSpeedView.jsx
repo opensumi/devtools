@@ -8,13 +8,13 @@ const NetSpeedView = ({ capturing, upload, download }) => {
   const downloadSpeed = format(download / 1000);
 
   return (
-    <div className="netspeed">
+    <div className='netspeed'>
       <div>
-        <span className="netspeed-icon icon-upload"></span>
+        <span className='netspeed-icon icon-upload'></span>
         <span>{uploadSpeed.number}</span> <span>{uploadSpeed.unit}</span>
       </div>
       <div>
-        <span className="netspeed-icon icon-download"></span>
+        <span className='netspeed-icon icon-download'></span>
         <span>{downloadSpeed.number}</span> <span>{downloadSpeed.unit}</span>
       </div>
     </div>

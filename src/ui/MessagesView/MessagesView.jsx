@@ -1,21 +1,10 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  createContext,
-} from 'react';
+import React, { useState, useEffect, useRef, useMemo, createContext } from 'react';
 import ResizableTable from './ResizableTable';
 import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './react-tabs.scss';
 import JsonView from 'react-json-view';
-import {
-  startCapturing,
-  stopCapturing,
-  getMessages,
-  getLatency,
-} from '../../capturer';
+import { startCapturing, stopCapturing, getMessages, getLatency } from '../../capturer';
 import { updateMessages, getParsedMessage } from './messagesHelper';
 import { generateColumns } from './columnsHelper';
 import './MessagesView.scss';
@@ -99,14 +88,10 @@ const MessagesView = () => {
       .filter((r) => {
         return (
           (filters.type ? r.type && r.type === filters.type : true) &&
-          (filters.service
-            ? r.service && r.service === filters.service
-            : true) &&
+          (filters.service ? r.service && r.service === filters.service : true) &&
           (filters.method ? r.method && r.method === filters.method : true) &&
           (filters.send ? r.send && r.send.includes(filters.send) : true) &&
-          (filters.receive
-            ? r.receive && r.receive.includes(filters.receive)
-            : true)
+          (filters.receive ? r.receive && r.receive.includes(filters.receive) : true)
         );
       });
   }, [messages, filters]);
@@ -122,8 +107,7 @@ const MessagesView = () => {
         // directly we will always get an empty array. use setMessages to get
         // the latest messages (oldMessages) instead.
         setMessages((oldMessages) => {
-          const { updatedMessages, newMessages, sendBytes, receiveBytes } =
-            updateMessages(oldMessages, newRawMessages);
+          const { updatedMessages, newMessages, sendBytes, receiveBytes } = updateMessages(oldMessages, newRawMessages);
           newMsgs = newMessages;
           newSendBytes = sendBytes;
           newReceiveBytes = receiveBytes;
@@ -241,66 +225,45 @@ const MessagesView = () => {
 
   return (
     <div>
-      <div ref={statbarRef} className="statbar">
-        <div className="toolbar">
-          <button
-            className={`toolbar-button ${capturing ? 'active' : ''}`}
-            onClick={toggleCapturing}
-          >
-            <span className="toolbar-icon icon-record"></span>
-            {isCompact ? null : <span className="toolbar-text">Capture</span>}
+      <div ref={statbarRef} className='statbar'>
+        <div className='toolbar'>
+          <button className={`toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
+            <span className='toolbar-icon icon-record'></span>
+            {isCompact ? null : <span className='toolbar-text'>Capture</span>}
           </button>
-          <button className="toolbar-button" onClick={clearMessages}>
-            <span className="toolbar-icon icon-clear"></span>
-            {isCompact ? null : <span className="toolbar-text">Clear</span>}
+          <button className='toolbar-button' onClick={clearMessages}>
+            <span className='toolbar-icon icon-clear'></span>
+            {isCompact ? null : <span className='toolbar-text'>Clear</span>}
           </button>
-          <button
-            className={`toolbar-button ${autoScroll ? 'active' : ''}`}
-            onClick={toggleAutoScroll}
-          >
-            <span className="toolbar-icon icon-bottom"></span>
-            {isCompact ? null : <span className="toolbar-text">Scroll</span>}
+          <button className={`toolbar-button ${autoScroll ? 'active' : ''}`} onClick={toggleAutoScroll}>
+            <span className='toolbar-icon icon-bottom'></span>
+            {isCompact ? null : <span className='toolbar-text'>Scroll</span>}
           </button>
-          <button
-            className={`toolbar-button ${filters.enabled ? 'active' : ''}`}
-            onClick={toggleFilters}
-          >
-            <span className="toolbar-icon icon-filter"></span>
-            {isCompact ? null : <span className="toolbar-text">Filters</span>}
+          <button className={`toolbar-button ${filters.enabled ? 'active' : ''}`} onClick={toggleFilters}>
+            <span className='toolbar-icon icon-filter'></span>
+            {isCompact ? null : <span className='toolbar-text'>Filters</span>}
           </button>
-          <button className="toolbar-button" onClick={clearFilters}>
-            <span className="toolbar-icon icon-reset"></span>
-            {isCompact ? null : (
-              <span className="toolbar-text">Reset Filters</span>
-            )}
+          <button className='toolbar-button' onClick={clearFilters}>
+            <span className='toolbar-icon icon-reset'></span>
+            {isCompact ? null : <span className='toolbar-text'>Reset Filters</span>}
           </button>
           <button
-            className={`toolbar-button ${
-              shouldParseExtProtocol ? 'active' : ''
-            }`}
+            className={`toolbar-button ${shouldParseExtProtocol ? 'active' : ''}`}
             onClick={toggleShouldParseExtProtocol}
           >
-            <span className="toolbar-icon icon-braces"></span>
-            {isCompact ? null : (
-              <span className="toolbar-text">Parse ExtProtocol</span>
-            )}
+            <span className='toolbar-icon icon-braces'></span>
+            {isCompact ? null : <span className='toolbar-text'>Parse ExtProtocol</span>}
           </button>
         </div>
-        <div className="netbar">
-          <NetSpeedView
-            capturing={capturing}
-            upload={netspeed.send}
-            download={netspeed.receive}
-          />
+        <div className='netbar'>
+          <NetSpeedView capturing={capturing} upload={netspeed.send} download={netspeed.receive} />
           <NetLatencyView capturing={capturing} latency={latency} />
         </div>
       </div>
       <ResizableTable>
         <FilterContext.Provider value={filters}>
           <DataGrid
-            className={`rdg-light ${
-              filters.enabled ? 'filter-container' : undefined
-            }`}
+            className={`rdg-light ${filters.enabled ? 'filter-container' : undefined}`}
             style={{ height: 'calc(100vh - 30px)' }}
             ref={gridRef}
             columns={columns}
@@ -324,11 +287,7 @@ const MessagesView = () => {
               {selectedRow ? (
                 <JsonView
                   style={rjvStyles}
-                  src={getParsedMessage(
-                    selectedRow,
-                    'send',
-                    shouldParseExtProtocol
-                  )}
+                  src={getParsedMessage(selectedRow, 'send', shouldParseExtProtocol)}
                   name={false}
                   collapsed={1}
                   displayDataTypes={false}
@@ -342,11 +301,7 @@ const MessagesView = () => {
               {selectedRow ? (
                 <JsonView
                   style={rjvStyles}
-                  src={getParsedMessage(
-                    selectedRow,
-                    'receive',
-                    shouldParseExtProtocol
-                  )}
+                  src={getParsedMessage(selectedRow, 'receive', shouldParseExtProtocol)}
                   name={false}
                   collapsed={1}
                   displayDataTypes={false}
