@@ -11,13 +11,12 @@ const evalInWindow = (expression, ...rest) => {
 
   expression = `
       (function () {
-        window.__opensumi_devtools = window.__opensumi_devtools || {}
-        window.__opensumi_devtools.evaling = true
+        window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.evaling = true
 
         try {
           return ${expression}
         } finally {
-          window.__opensumi_devtools.evaling = false
+          window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.evaling = false
         }
       })()
     `;

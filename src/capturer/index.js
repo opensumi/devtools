@@ -4,20 +4,20 @@ const startCapturing = () => {
   return evalInWindow(() => {
     // Return if messages are already being listened to prevent duplicates
     // when reloading the extension
-    if (window.__opensumi_devtools.messages != null) {
-      window.__opensumi_devtools.messages = [];
+    if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages != null) {
+      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages = [];
       return;
     }
 
-    window.__opensumi_devtools.messages = [];
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages = [];
 
-    window.__opensumi_devtools.capture = (message) => {
-      if (window.__opensumi_devtools.evaling) return;
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.capture = (message) => {
+      if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.evaling) return;
 
       // if the length of messages is greater than 9999, devtools window
       // is regarded to be closed in capturing state. So stop capturing.
-      if (window.__opensumi_devtools.messages.length > 9999) {
-        window.__opensumi_devtools = undefined;
+      if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages.length > 9999) {
+        window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__ = {};
         return;
       }
 
@@ -55,27 +55,22 @@ const startCapturing = () => {
         }
       }
 
-      window.__opensumi_devtools.messages.push(msg);
+      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages.push(msg);
     };
   });
 };
 
 const stopCapturing = () => {
   return evalInWindow(() => {
-    if (window.__opensumi_devtools.messages)
-      delete window.__opensumi_devtools.messages;
-    if (window.__opensumi_devtools.capture)
-      delete window.__opensumi_devtools.capture;
-    if (window.__opensumi_devtools.latency)
-      delete window.__opensumi_devtools.latency;
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__ = {};
   });
 };
 
 const getMessages = () => {
   return evalInWindow(() => {
-    const messages = window.__opensumi_devtools.messages;
+    const messages = window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages;
     // clear messages after getting them each time
-    if (messages) window.__opensumi_devtools.messages = [];
+    if (messages) window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages = [];
     return messages;
   }).then((messages) => {
     if (messages) return messages;
@@ -88,7 +83,7 @@ const getMessages = () => {
 
 const getLatency = () => {
   return evalInWindow(() => {
-    return window.__opensumi_devtools.latency;
+    return window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.latency;
   }).then((latency) => {
     return latency;
   });
