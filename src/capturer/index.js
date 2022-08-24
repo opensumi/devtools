@@ -57,11 +57,26 @@ const startCapturing = () => {
 
       window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages.push(msg);
     };
+
+    // send notification to opensumi core by custom event
+    const latencyEvent = new CustomEvent('devtools:latency', {
+      detail: {
+        command: 'start',
+      },
+    });
+    window.dispatchEvent(latencyEvent);
   });
 };
 
 const stopCapturing = () => {
   return evalInWindow(() => {
+    const latencyEvent = new CustomEvent('devtools:latency', {
+      detail: {
+        command: 'stop',
+      },
+    });
+    window.dispatchEvent(latencyEvent);
+
     window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__ = {};
   });
 };
