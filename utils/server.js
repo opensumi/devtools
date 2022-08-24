@@ -1,16 +1,14 @@
-// Do this as the first thing so that any code reading it knows the right env.
-process.env.BABEL_ENV = 'development';
-process.env.NODE_ENV = 'development';
-process.env.ASSET_PATH = '/';
+import WebpackDevServer from 'webpack-dev-server';
+import webpack from 'webpack';
+import config from '../webpack.config.js';
+import env from './env.js';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
+import { debounce } from 'lodash-es';
+import SSEStream from 'ssestream';
 
-const WebpackDevServer = require('webpack-dev-server'),
-  webpack = require('webpack'),
-  config = require('../webpack.config'),
-  env = require('./env'),
-  path = require('path');
-const { custom } = require('../webpack.config');
-const debounce = require('lodash').debounce;
-const SSEStream = require('ssestream').default;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const customOptions = config.custom;
 
@@ -84,7 +82,7 @@ const server = new WebpackDevServer(
           const compileDoneHook = debounce((stats) => {
             const { modules } = stats.toJson({ all: false, modules: true });
             const updatedJsModules = modules.filter(
-              (module) => module.type === 'module' && module.moduleType === 'javascript/auto',
+              (module) => module.type === 'module' && module.moduleType === 'javascript/esm',
             );
 
             const isBackgroundUpdated = updatedJsModules.some((module) =>
@@ -100,7 +98,7 @@ const server = new WebpackDevServer(
               !stats.hasErrors() && isContentScriptsUpdated && customOptions.enableContentScriptsAutoReload;
 
             if (shouldBackgroundReload) {
-              sseStream.writeMessage(
+              sseStream.write(
                 {
                   event: 'background-updated',
                   data: {}, // "data" key should be reserved though it is empty.
@@ -109,7 +107,7 @@ const server = new WebpackDevServer(
               );
             }
             if (shouldContentScriptsReload) {
-              sseStream.writeMessage(
+              sseStream.write(
                 {
                   event: 'content-scripts-updated',
                   data: {},

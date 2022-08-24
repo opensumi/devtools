@@ -1,0 +1,46 @@
+# release.yml
+# release a version when a workflow_dispatch is triggered
+name: release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v3
+        id: changelog
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-on-empty: 'false'
+          git-message: 'chore(release): {version}'
+
+      - name: Build
+        run: |
+          yarn install
+          yarn run build
+
+      - name: Zip to opensumi-devtools.zip
+        run: zip -j opensumi-devtools.zip build/*
+
+      - name: Append version to release file names
+        run: |
+          cp opensumi-devtools.zip ${{format('opensumi-devtools-{0}.zip', steps.changelog.outputs.tag)}}
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'opensumi-devtools-v*.*'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.changelog.outputs.tag }}
+          generateReleaseNotes: true

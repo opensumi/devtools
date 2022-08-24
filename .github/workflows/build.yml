@@ -1,0 +1,56 @@
+# build.yml
+# checks and test build on push and pull request to main branch
+# creates a pre-release on push to main
+name: build
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: |
+          yarn install
+
+      - name: Code Format checks
+        run: |
+          yarn run prettier:check
+
+      - name: Build
+        run: |
+          yarn run build
+
+      - name: zip to opensumi-devtools.zip
+        run: zip opensumi-devtools.zip -r build/*
+
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: 'opensumi-devtools.zip'
+
+      - name: Pre-Release
+        if: ${{ steps.check_files.outputs.files_exists == 'true' && github.event_name == 'push' }}
+        uses: 'marvinpinto/action-automatic-releases@latest'
+        with:
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          automatic_release_tag: 'latest'
+          prerelease: true
+          title: 'Development Build'
+          files: |
+            opensumi-devtools.zip

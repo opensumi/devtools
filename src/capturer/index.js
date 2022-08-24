@@ -1,4 +1,4 @@
-import evalInWindow from '../utils/eval';
+import evalInWindow from '../utils/eval.js';
 
 const startCapturing = () => {
   return evalInWindow(() => {
