@@ -1,7 +1,8 @@
 import React from 'react';
-import './NoMessageSelectedView.scss';
 
-const NoMessageSelectedView = () => {
+import './NoMessageSelected.scss';
+
+const NoMessageSelected = () => {
   return (
     <div className='empty-view'>
       <div className='empty-bold-text'>No message selected</div>
@@ -9,4 +10,4 @@ const NoMessageSelectedView = () => {
   );
 };
 
-export default NoMessageSelectedView;
+export default NoMessageSelected;

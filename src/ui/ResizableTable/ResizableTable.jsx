@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+
 import './ResizableTable.scss';
 
 const ResizableTable = ({ children }) => {

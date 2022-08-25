@@ -1,7 +1,8 @@
 import React from 'react';
-import './NetLatencyView.scss';
 
-const NetLatencyView = ({ capturing, latency }) => {
+import './NetLatency.scss';
+
+const NetLatency = ({ capturing, latency }) => {
   if (!capturing) return null;
 
   if (latency === null || typeof latency === 'undefined') {
@@ -22,4 +23,4 @@ const NetLatencyView = ({ capturing, latency }) => {
   );
 };
 
-export default NetLatencyView;
+export default NetLatency;
