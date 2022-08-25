@@ -1,22 +1,23 @@
 import React, { useState, useEffect, useRef, useMemo, createContext } from 'react';
-import ResizableTable from './ResizableTable';
+import ResizableTable from '../ResizableTable/ResizableTable';
+import NetSpeed from '../NetSpeed/NetSpeed';
+import NetLatency from '../NetLatency/NetLatency';
 import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import './react-tabs.scss';
 import JsonView from 'react-json-view';
+import NoMessageSelected from '../NoMessageSelected/NoMessageSelected';
+import { generateColumns } from './rdgHelper';
 import { startCapturing, stopCapturing, getMessages, getLatency } from '../../capturer/rpc';
-import { updateMessages, getParsedMessage } from './messagesHelper';
-import { generateColumns } from './columnsHelper';
-import './RpcView.scss';
-import NoMessageSelectedView from './NoMessageSelectedView';
-import NetSpeedView from './NetSpeedView';
-import NetLatencyView from './NetLatencyView';
+import { updateMessages, getParsedMessage } from './messageHelper';
+
+import './Rpc.scss';
+import '../react-tabs.scss';
 
 const INTERVAL = 1000;
 
 const FilterContext = createContext(undefined);
 
-const RpcView = () => {
+const Rpc = () => {
   const [capturing, setCapturing] = useState(false);
   const [messages, setMessages] = useState([]);
   const [bottomRow, setBottomRow] = useState(-1);
@@ -256,8 +257,8 @@ const RpcView = () => {
           </button>
         </div>
         <div className='netbar'>
-          <NetSpeedView capturing={capturing} upload={netspeed.send} download={netspeed.receive} />
-          <NetLatencyView capturing={capturing} latency={latency} />
+          <NetSpeed capturing={capturing} upload={netspeed.send} download={netspeed.receive} />
+          <NetLatency capturing={capturing} latency={latency} />
         </div>
       </div>
       <ResizableTable>
@@ -294,7 +295,7 @@ const RpcView = () => {
                   enableClipboard={false}
                 />
               ) : (
-                <NoMessageSelectedView />
+                <NoMessageSelected />
               )}
             </TabPanel>
             <TabPanel>
@@ -308,7 +309,7 @@ const RpcView = () => {
                   enableClipboard={false}
                 />
               ) : (
-                <NoMessageSelectedView />
+                <NoMessageSelected />
               )}
             </TabPanel>
           </Tabs>
@@ -318,4 +319,4 @@ const RpcView = () => {
   );
 };
 
-export default RpcView;
+export default Rpc;

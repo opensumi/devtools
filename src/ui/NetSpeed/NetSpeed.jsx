@@ -1,7 +1,7 @@
 import React from 'react';
-import './NetSpeedView.scss';
+import './NetSpeed.scss';
 
-const NetSpeedView = ({ capturing, upload, download }) => {
+const NetSpeed = ({ capturing, upload, download }) => {
   if (!capturing) return null;
 
   const uploadSpeed = format(upload / 1000);
@@ -38,4 +38,4 @@ const format = (num) => {
   };
 };
 
-export default NetSpeedView;
+export default NetSpeed;

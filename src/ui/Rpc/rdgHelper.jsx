@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useFocusRef } from './useFocusRef';
+import { useFocusRef } from '../useFocusRef';
 
 const inputStopPropagation = (event) => {
   if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {

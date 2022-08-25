@@ -1,9 +1,13 @@
 import React from 'react';
 import './index.scss';
-import RpcView from './RpcView/RpcView';
+import Rpc from './Rpc/Rpc';
 
-const Panel = () => {
-  return <RpcView />;
+const Devtools = () => {
+  return (
+    <div>
+      <Rpc />
+    </div>
+  );
 };
 
-export default Panel;
+export default Devtools;
