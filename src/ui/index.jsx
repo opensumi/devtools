@@ -1,5 +1,5 @@
 import React from 'react';
-import './Panel.scss';
+import './index.scss';
 import MessagesView from './MessagesView/MessagesView';
 
 const Panel = () => {
