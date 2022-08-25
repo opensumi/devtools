@@ -4,7 +4,7 @@ import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './react-tabs.scss';
 import JsonView from 'react-json-view';
-import { startCapturing, stopCapturing, getMessages, getLatency } from '../../capturer';
+import { startCapturing, stopCapturing, getMessages, getLatency } from '../../capturer/rpc';
 import { updateMessages, getParsedMessage } from './messagesHelper';
 import { generateColumns } from './columnsHelper';
 import './MessagesView.scss';
