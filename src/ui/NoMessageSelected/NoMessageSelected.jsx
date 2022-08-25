@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './NoMessageSelected.scss';
 
 const NoMessageSelected = () => {

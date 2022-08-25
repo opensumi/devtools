@@ -1,6 +1,7 @@
 import React from 'react';
-import './index.scss';
 import Rpc from './Rpc/Rpc';
+
+import './index.scss';
 
 const Devtools = () => {
   return (

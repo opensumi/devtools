@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './NetLatency.scss';
 
 const NetLatency = ({ capturing, latency }) => {

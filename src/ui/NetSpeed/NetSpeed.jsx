@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './NetSpeed.scss';
 
 const NetSpeed = ({ capturing, upload, download }) => {
