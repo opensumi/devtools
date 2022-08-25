@@ -7,7 +7,7 @@ import JsonView from 'react-json-view';
 import { startCapturing, stopCapturing, getMessages, getLatency } from '../../capturer/rpc';
 import { updateMessages, getParsedMessage } from './messagesHelper';
 import { generateColumns } from './columnsHelper';
-import './MessagesView.scss';
+import './RpcView.scss';
 import NoMessageSelectedView from './NoMessageSelectedView';
 import NetSpeedView from './NetSpeedView';
 import NetLatencyView from './NetLatencyView';
@@ -16,7 +16,7 @@ const INTERVAL = 1000;
 
 const FilterContext = createContext(undefined);
 
-const MessagesView = () => {
+const RpcView = () => {
   const [capturing, setCapturing] = useState(false);
   const [messages, setMessages] = useState([]);
   const [bottomRow, setBottomRow] = useState(-1);
@@ -318,4 +318,4 @@ const MessagesView = () => {
   );
 };
 
-export default MessagesView;
+export default RpcView;

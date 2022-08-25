@@ -1,9 +1,9 @@
 import React from 'react';
 import './index.scss';
-import MessagesView from './MessagesView/MessagesView';
+import RpcView from './RpcView/RpcView';
 
 const Panel = () => {
-  return <MessagesView />;
+  return <RpcView />;
 };
 
 export default Panel;
