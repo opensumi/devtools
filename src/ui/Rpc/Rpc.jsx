@@ -17,7 +17,7 @@ const INTERVAL = 1000;
 
 const FilterContext = createContext(undefined);
 
-const Rpc = () => {
+const Rpc = ({ isCompact, showIpc }) => {
   const [capturing, setCapturing] = useState(false);
   const [messages, setMessages] = useState([]);
   const [bottomRow, setBottomRow] = useState(-1);
@@ -39,25 +39,13 @@ const Rpc = () => {
     receive: 0,
   });
   const [latency, setLatency] = useState(null);
-  const [isCompact, setIsCompact] = useState(false);
 
   const timer = useRef(null);
-  const statbarRef = useRef(null);
   const gridRef = useRef(null);
   const servicesRef = useRef(new Set()); // we need ref to get old values in all renders
   const methodsRef = useRef(new Set());
 
-  const setCompactMode = () => {
-    if (statbarRef.current.offsetWidth < 600) {
-      setIsCompact(true);
-    } else {
-      setIsCompact(false);
-    }
-  };
-
   useEffect(() => {
-    setCompactMode();
-    window.addEventListener('resize', setCompactMode);
     toggleCapturing();
   }, []);
 
@@ -226,8 +214,11 @@ const Rpc = () => {
 
   return (
     <div>
-      <div ref={statbarRef} className='statbar'>
+      <div className='statbar'>
         <div className='toolbar'>
+          <button className={'toolbar-button'} onClick={showIpc}>
+            {isCompact ? null : <span>R/I</span>}
+          </button>
           <button className={`toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
             <span className='toolbar-icon icon-record'></span>
             {isCompact ? null : <span className='toolbar-text'>Capture</span>}
