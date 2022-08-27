@@ -23,7 +23,7 @@ const ResizableTable = ({ children }) => {
 
   useEffect(() => {
     setTableHeight(tableElement.current.offsetHeight);
-  }, []);
+  });
 
   const mouseDown = () => {
     setHandleStatus('active');
