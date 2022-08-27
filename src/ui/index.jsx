@@ -32,10 +32,10 @@ const Devtools = () => {
 
   return (
     <div ref={containerRef}>
-      <div style={{ display: isRpc ? 'block' : 'none' }}>
+      <div className={`devtool-container ${isRpc ? 'show' : 'hide'}`}>
         <Rpc isCompact={isCompact} showIpc={showIpc} />
       </div>
-      <div style={{ display: !isRpc ? 'block' : 'none' }}>
+      <div className={`devtool-container ${!isRpc ? 'show' : 'hide'}`}>
         <Ipc isCompact={isCompact} showRpc={showRpc} />
       </div>
     </div>
