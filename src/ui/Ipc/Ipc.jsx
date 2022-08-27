@@ -7,14 +7,13 @@ import NoMessageSelected from '../NoMessageSelected/NoMessageSelected';
 import { generateColumns } from './rdgHelper';
 import { startCapturingIpc, stopCapturingIpc, getIpcMessages } from '../../capturer/ipc';
 
-import './Ipc.scss';
 import '../react-tabs.scss';
 
 const INTERVAL = 1000;
 
 const FilterContext = createContext(undefined);
 
-const Ipc = ({ isCompact, showRpc }) => {
+const Ipc = ({ isCompact }) => {
   const [capturing, setCapturing] = useState(false);
   const [messages, setMessages] = useState([]);
   const [bottomRow, setBottomRow] = useState(-1);
@@ -167,9 +166,6 @@ const Ipc = ({ isCompact, showRpc }) => {
     <div>
       <div className='statbar'>
         <div className='toolbar'>
-          <button className={'toolbar-button'} onClick={showRpc}>
-            {isCompact ? null : <span>R/I</span>}
-          </button>
           <button className={`toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
             <span className='toolbar-icon icon-record'></span>
             {isCompact ? null : <span className='toolbar-text'>Capture</span>}

@@ -8,17 +8,18 @@ const Devtools = () => {
   const [isRpc, setIsRpc] = useState(true);
   const [isCompact, setIsCompact] = useState(false);
   const containerRef = useRef(null);
+  const buttonRef = useRef(null);
 
-  const showRpc = () => {
-    setIsRpc(true);
-  };
-
-  const showIpc = () => {
-    setIsRpc(false);
+  const toggle = () => {
+    setIsRpc(!isRpc);
+    buttonRef.current.className = `devtool-toggle ${!isRpc ? 'rpc' : 'ipc'} moving`;
+    setTimeout(() => {
+      buttonRef.current.className = `devtool-toggle ${!isRpc ? 'rpc' : 'ipc'}`;
+    }, 200);
   };
 
   const setCompactMode = () => {
-    if (containerRef.current.offsetWidth < 600) {
+    if (containerRef.current.offsetWidth < 700) {
       setIsCompact(true);
     } else {
       setIsCompact(false);
@@ -32,11 +33,12 @@ const Devtools = () => {
 
   return (
     <div ref={containerRef}>
+      <button ref={buttonRef} className={`devtool-toggle rpc`} onClick={toggle}></button>
       <div className={`devtool-container ${isRpc ? 'show' : 'hide'}`}>
-        <Rpc isCompact={isCompact} showIpc={showIpc} />
+        <Rpc isCompact={isCompact} />
       </div>
       <div className={`devtool-container ${!isRpc ? 'show' : 'hide'}`}>
-        <Ipc isCompact={isCompact} showRpc={showRpc} />
+        <Ipc isCompact={isCompact} />
       </div>
     </div>
   );

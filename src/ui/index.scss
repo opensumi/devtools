@@ -2,8 +2,62 @@ body {
   margin: 0;
 }
 
+.devtool-toggle {
+  position: absolute;
+  width: 70px;
+  height: 22px;
+  margin: 3px;
+  cursor: pointer;
+  border-radius: 100px;
+  border: 1px solid #7aa7c7;
+  background-color: #e1ecf4;
+  transition: all 100;
+  &:hover:not(.moving) {
+    &:after {
+      background-color: #b3d3ea;
+    }
+  }
+  &:after {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 30px;
+    line-height: 14px;
+    text-align: center;
+    font-size: 12px;
+    background-color: #a0c7e4;
+    border: 1px solid #39739d;
+    transition: all 100ms;
+  }
+  &.rpc {
+    &:after {
+      content: 'RPC';
+      border-radius: 50px 50px 50px 50px;
+      color: #2c5777;
+    }
+  }
+  &.ipc {
+    &:after {
+      content: 'IPC';
+      border-radius: 50px 50px 50px 50px;
+      transform: translate(100%, 0);
+      color: #39739d;
+    }
+  }
+  &.moving {
+    // background-color: darken(#263238, 5%);
+    &:after {
+      color: transparent;
+      // border-color: darken(#546e7a, 8%);
+      // background-color: darken(#37474f, 10%);
+      transition: color 0s, transform 100ms, border-radius 100ms, background-color 100ms;
+    }
+  }
+}
+
 .devtool-container {
   position: absolute;
+  z-index: -1;
   left: 0;
   top: 0;
   width: 100%;
@@ -12,5 +66,170 @@ body {
   }
   &.hide {
     visibility: hidden;
+  }
+}
+
+.statbar {
+  height: 28px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.toolbar {
+  display: flex;
+  margin: 3px;
+  margin-left: 80px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+
+.toolbar-button {
+  flex-shrink: 0;
+  -webkit-font-smoothing: antialiased;
+  background-color: #e1ecf4;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #39739d;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  margin: 0;
+  outline: none;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #b3d3ea;
+    color: #2c5777;
+  }
+
+  &.active {
+    background-color: #a0c7e4;
+    box-shadow: none;
+    color: #2c5777;
+  }
+}
+
+.toolbar-text {
+  margin-left: 5px;
+}
+
+.toolbar-icon {
+  margin-top: 1px;
+  width: 13px;
+  height: 13px;
+  float: left;
+}
+
+.icon-record {
+  background: url('../assets/icons/record.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-clear {
+  background: url('../assets/icons/clear.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-bottom {
+  background: url('../assets/icons/bottom.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-filter {
+  background: url('../assets/icons/filter.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-reset {
+  background: url('../assets/icons/reset.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-expand-all {
+  background: url('../assets/icons/expand_all.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-collapse-all {
+  background: url('../assets/icons/collapse_all.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-braces {
+  background: url('../assets/icons/braces.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.rdg {
+  border: 0;
+}
+
+.rdg-header-cell {
+  font-size: 12px;
+  font-weight: normal;
+  background-color: #f1f3f4;
+  border-color: #cacdd1;
+}
+
+.rdg-body-cell {
+  font-size: 12px;
+  font-family: monospace;
+  border-bottom: 0;
+  border-color: #cacdd1;
+
+  &.column-type {
+    text-align: center;
+  }
+}
+
+.filter-container {
+  .filter {
+    inline-size: 100%;
+    padding: 1px;
+    font-size: 12px;
+  }
+
+  .filter-cell {
+    line-height: 25px;
+    padding: 0;
+
+    > div {
+      padding-block: 0;
+      padding-inline: 8px;
+
+      &:first-child {
+        border-block-end: 1px solid var(--rdg-border-color);
+      }
+    }
   }
 }
