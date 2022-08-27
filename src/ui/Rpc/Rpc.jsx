@@ -216,31 +216,31 @@ const Rpc = ({ isCompact }) => {
     <div>
       <div className='statbar'>
         <div className='toolbar'>
-          <button className={`toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
-            <span className='toolbar-icon icon-record'></span>
+          <button className={`rpc-toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
+            <span className='toolbar-icon rpc-icon-record'></span>
             {isCompact ? null : <span className='toolbar-text'>Capture</span>}
           </button>
-          <button className='toolbar-button' onClick={clearMessages}>
-            <span className='toolbar-icon icon-clear'></span>
+          <button className='rpc-toolbar-button' onClick={clearMessages}>
+            <span className='toolbar-icon rpc-icon-clear'></span>
             {isCompact ? null : <span className='toolbar-text'>Clear</span>}
           </button>
-          <button className={`toolbar-button ${autoScroll ? 'active' : ''}`} onClick={toggleAutoScroll}>
-            <span className='toolbar-icon icon-bottom'></span>
+          <button className={`rpc-toolbar-button ${autoScroll ? 'active' : ''}`} onClick={toggleAutoScroll}>
+            <span className='toolbar-icon rpc-icon-bottom'></span>
             {isCompact ? null : <span className='toolbar-text'>Scroll</span>}
           </button>
-          <button className={`toolbar-button ${filters.enabled ? 'active' : ''}`} onClick={toggleFilters}>
-            <span className='toolbar-icon icon-filter'></span>
+          <button className={`rpc-toolbar-button ${filters.enabled ? 'active' : ''}`} onClick={toggleFilters}>
+            <span className='toolbar-icon rpc-icon-filter'></span>
             {isCompact ? null : <span className='toolbar-text'>Filters</span>}
           </button>
-          <button className='toolbar-button' onClick={clearFilters}>
-            <span className='toolbar-icon icon-reset'></span>
+          <button className='rpc-toolbar-button' onClick={clearFilters}>
+            <span className='toolbar-icon rpc-icon-reset'></span>
             {isCompact ? null : <span className='toolbar-text'>Reset Filters</span>}
           </button>
           <button
-            className={`toolbar-button ${shouldParseExtProtocol ? 'active' : ''}`}
+            className={`rpc-toolbar-button ${shouldParseExtProtocol ? 'active' : ''}`}
             onClick={toggleShouldParseExtProtocol}
           >
-            <span className='toolbar-icon icon-braces'></span>
+            <span className='toolbar-icon rpc-icon-braces'></span>
             {isCompact ? null : <span className='toolbar-text'>Parse ExtProtocol</span>}
           </button>
         </div>

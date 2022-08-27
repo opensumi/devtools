@@ -10,3 +10,82 @@
   -webkit-user-select: none; /* Safari */
   user-select: none; /* Standard syntax */
 }
+
+.rpc-toolbar-button {
+  flex-shrink: 0;
+  -webkit-font-smoothing: antialiased;
+  background-color: #e1ecf4;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #39739d;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  margin: 0;
+  outline: none;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #b3d3ea;
+    color: #2c5777;
+  }
+
+  &.active {
+    background-color: #a0c7e4;
+    box-shadow: none;
+    color: #2c5777;
+  }
+}
+
+.rpc-icon-record {
+  background: url('../../assets/icons/blue/record.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.rpc-icon-clear {
+  background: url('../../assets/icons/blue/clear.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.rpc-icon-bottom {
+  background: url('../../assets/icons/blue/bottom.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.rpc-icon-filter {
+  background: url('../../assets/icons/blue/filter.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.rpc-icon-reset {
+  background: url('../../assets/icons/blue/reset.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.rpc-icon-braces {
+  background: url('../../assets/icons/blue/braces.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

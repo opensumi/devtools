@@ -7,6 +7,7 @@ import NoMessageSelected from '../NoMessageSelected/NoMessageSelected';
 import { generateColumns } from './rdgHelper';
 import { startCapturingIpc, stopCapturingIpc, getIpcMessages } from '../../capturer/ipc';
 
+import './Ipc.scss';
 import '../react-tabs.scss';
 
 const INTERVAL = 1000;
@@ -166,24 +167,24 @@ const Ipc = ({ isCompact }) => {
     <div>
       <div className='statbar'>
         <div className='toolbar'>
-          <button className={`toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
-            <span className='toolbar-icon icon-record'></span>
+          <button className={`ipc-toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
+            <span className='toolbar-icon ipc-icon-record'></span>
             {isCompact ? null : <span className='toolbar-text'>Capture</span>}
           </button>
-          <button className='toolbar-button' onClick={clearMessages}>
-            <span className='toolbar-icon icon-clear'></span>
+          <button className='ipc-toolbar-button' onClick={clearMessages}>
+            <span className='toolbar-icon ipc-icon-clear'></span>
             {isCompact ? null : <span className='toolbar-text'>Clear</span>}
           </button>
-          <button className={`toolbar-button ${autoScroll ? 'active' : ''}`} onClick={toggleAutoScroll}>
-            <span className='toolbar-icon icon-bottom'></span>
+          <button className={`ipc-toolbar-button ${autoScroll ? 'active' : ''}`} onClick={toggleAutoScroll}>
+            <span className='toolbar-icon ipc-icon-bottom'></span>
             {isCompact ? null : <span className='toolbar-text'>Scroll</span>}
           </button>
-          <button className={`toolbar-button ${filters.enabled ? 'active' : ''}`} onClick={toggleFilters}>
-            <span className='toolbar-icon icon-filter'></span>
+          <button className={`ipc-toolbar-button ${filters.enabled ? 'active' : ''}`} onClick={toggleFilters}>
+            <span className='toolbar-icon ipc-icon-filter'></span>
             {isCompact ? null : <span className='toolbar-text'>Filters</span>}
           </button>
-          <button className='toolbar-button' onClick={clearFilters}>
-            <span className='toolbar-icon icon-reset'></span>
+          <button className='ipc-toolbar-button' onClick={clearFilters}>
+            <span className='toolbar-icon ipc-icon-reset'></span>
             {isCompact ? null : <span className='toolbar-text'>Reset Filters</span>}
           </button>
         </div>
