@@ -108,10 +108,13 @@ body {
 .toolbar {
   display: flex;
   margin: 3px;
-  margin-left: 80px;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 5px;
+
+  &.electron {
+    margin-left: 80px;
+  }
 }
 
 .toolbar-text {

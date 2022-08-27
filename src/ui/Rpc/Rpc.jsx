@@ -17,7 +17,7 @@ const INTERVAL = 1000;
 
 const FilterContext = createContext(undefined);
 
-const Rpc = ({ isCompact }) => {
+const Rpc = ({ isCompact, isElectron }) => {
   const [capturing, setCapturing] = useState(false);
   const [messages, setMessages] = useState([]);
   const [bottomRow, setBottomRow] = useState(-1);
@@ -215,7 +215,7 @@ const Rpc = ({ isCompact }) => {
   return (
     <div>
       <div className='statbar'>
-        <div className='toolbar'>
+        <div className={`toolbar ${isElectron ? 'electron' : ''}`}>
           <button className={`rpc-toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
             <span className='toolbar-icon rpc-icon-record'></span>
             {isCompact ? null : <span className='toolbar-text'>Capture</span>}

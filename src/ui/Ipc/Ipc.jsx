@@ -166,7 +166,7 @@ const Ipc = ({ isCompact }) => {
   return (
     <div>
       <div className='statbar'>
-        <div className='toolbar'>
+        <div className='toolbar electron'>
           <button className={`ipc-toolbar-button ${capturing ? 'active' : ''}`} onClick={toggleCapturing}>
             <span className='toolbar-icon ipc-icon-record'></span>
             {isCompact ? null : <span className='toolbar-text'>Capture</span>}
