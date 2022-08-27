@@ -7,7 +7,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import JsonView from 'react-json-view';
 import NoMessageSelected from '../NoMessageSelected/NoMessageSelected';
 import { generateColumns } from './rdgHelper';
-import { startCapturing, stopCapturing, getMessages, getLatency } from '../../capturer/rpc';
+import { startCapturingRpc, stopCapturingRpc, getRpcMessages, getLatency } from '../../capturer/rpc';
 import { updateMessages, getParsedMessage } from './messageHelper';
 
 import './Rpc.scss';
@@ -86,7 +86,7 @@ const Rpc = ({ isCompact }) => {
   }, [messages, filters]);
 
   const addMessages = () => {
-    getMessages()
+    getRpcMessages()
       .then((newRawMessages) => {
         let newMsgs = [];
         let newSendBytes = 0;
@@ -149,7 +149,7 @@ const Rpc = ({ isCompact }) => {
 
   const toggleCapturing = () => {
     if (capturing === true) {
-      stopCapturing()
+      stopCapturingRpc()
         .then(() => {
           setCapturing(false);
           clearInterval(timer.current);
@@ -165,7 +165,7 @@ const Rpc = ({ isCompact }) => {
           console.error(error.stack || error);
         });
     } else {
-      startCapturing()
+      startCapturingRpc()
         .then(() => {
           setCapturing(true);
           timer.current = setInterval(() => {
