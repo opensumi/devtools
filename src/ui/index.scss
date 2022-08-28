@@ -9,12 +9,12 @@ body {
   margin: 3px;
   cursor: pointer;
   border-radius: 100px;
-  border: 1px solid #7aa7c7;
-  background-color: #e1ecf4;
+  border: 1px solid rgba(44, 87, 119, 0.3);
+  background-color: rgba(44, 87, 119, 0.1);
   transition: all 100;
   &:hover:not(.moving) {
     &:after {
-      background-color: #b3d3ea;
+      background-color: rgba(166, 199, 228, 0.6);
     }
   }
   &:after {
@@ -25,14 +25,14 @@ body {
     line-height: 14px;
     text-align: center;
     font-size: 12px;
-    background-color: #a0c7e4;
-    border: 1px solid #39739d;
+    background-color: rgba(160, 199, 228, 0.8);
+    border: 1px solid rgba(44, 87, 119, 0.6);
     transition: all 100ms;
   }
   &:after {
     content: 'RPC';
     border-radius: 50px 50px 50px 50px;
-    color: #2c5777;
+    color: rgba(44, 87, 119, 0.9);
   }
   &.moving {
     &:after {
@@ -49,12 +49,12 @@ body {
   margin: 3px;
   cursor: pointer;
   border-radius: 100px;
-  border: 1px solid rgba(240, 130, 37, 0.5);
-  background-color: rgba(240, 130, 37, 0.15);
+  border: 1px solid rgba(10, 11, 12, 0.2);
+  background-color: rgba(10, 11, 12, 0.1);
   transition: all 100;
   &:hover:not(.moving) {
     &:after {
-      background-color: rgba(240, 130, 37, 0.3);
+      background-color: rgba(10, 11, 12, 0.15);
     }
   }
   &:after {
@@ -65,15 +65,15 @@ body {
     line-height: 14px;
     text-align: center;
     font-size: 12px;
-    background-color: rgba(240, 130, 37, 0.5);
-    border: 1px solid rgba(240, 130, 37, 1);
+    background-color: rgba(10, 11, 12, 0.2);
+    border: 1px solid rgba(10, 11, 12, 0.4);
     transition: all 100ms;
   }
   &:after {
     content: 'IPC';
     border-radius: 50px 50px 50px 50px;
     transform: translate(100%, 0);
-    color: #c85c00;
+    color: rgba(10, 11, 12, 0.6);
   }
   &.moving {
     &:after {

@@ -1,12 +1,12 @@
 .ipc-toolbar-button {
   flex-shrink: 0;
   -webkit-font-smoothing: antialiased;
-  background-color: rgba(240, 130, 37, 0.15);
+  background-color: rgba(10, 11, 12, 0.1);
   border-radius: 3px;
-  border: 1px solid rgba(240, 130, 37, 0.5);
+  border: 1px solid rgba(10, 11, 12, 0.3);
   box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset;
   box-sizing: border-box;
-  color: #c85c00;
+  color: rgba(10, 11, 12, 0.6);
   cursor: pointer;
   display: inline-block;
   font-size: 12px;
@@ -24,11 +24,13 @@
   white-space: nowrap;
 
   &:hover {
-    background-color: rgba(240, 130, 37, 0.3);
+    background-color: rgba(10, 11, 12, 0.15);
+    color: rgba(10, 11, 12, 0.7);
   }
 
   &.active {
-    background-color: rgba(240, 130, 37, 0.5);
+    background-color: rgba(10, 11, 12, 0.25);
+    color: rgba(10, 11, 12, 0.7);
     box-shadow: none;
   }
 }
