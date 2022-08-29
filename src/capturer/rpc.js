@@ -93,7 +93,7 @@ const getRpcMessages = () => {
 
     // Start listening for messages if array is missing meaning
     // the window was reloaded
-    return startCapturing().then(() => []);
+    return startCapturingRpc().then(() => []);
   });
 };
 
