@@ -4,24 +4,24 @@ const startCapturingIpc = () => {
   return evalInWindow(() => {
     // Return if messages are already being listened to prevent duplicates
     // when reloading the extension
-    if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages != null) {
-      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages = [];
+    if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages != null) {
+      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages = [];
       return;
     }
 
-    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages = [];
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages = [];
 
-    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.captureIpc = (message) => {
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.captureIPC = (message) => {
       if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.evaling) return;
 
       // if the length of messages is greater than 9999, devtools window
       // is regarded to be closed in capturing state. So stop capturing.
-      if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages.length > 9999) {
+      if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages.length > 9999) {
         window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__ = {};
         return;
       }
 
-      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages.push({
+      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages.push({
         time: new Date().toLocaleString().split(' ')[1],
         ipcMethod: message.ipcMethod,
         channel: message.channel,
@@ -33,16 +33,16 @@ const startCapturingIpc = () => {
 
 const stopCapturingIpc = () => {
   return evalInWindow(() => {
-    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages = undefined;
-    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.captureIpc = undefined;
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages = undefined;
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.captureIPC = undefined;
   });
 };
 
 const getIpcMessages = () => {
   return evalInWindow(() => {
-    const messages = window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages;
+    const messages = window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages;
     // clear messages after getting them each time
-    if (messages) window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.ipcMessages = [];
+    if (messages) window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages = [];
     return messages;
   }).then((messages) => {
     if (messages) return messages;
