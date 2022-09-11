@@ -4,7 +4,7 @@ const run = () => {
       console.log(exception);
     } else {
       if (result) {
-        chrome.devtools.panels.create('OpenSumi DevTools', 'logo.png', 'panel.html');
+        chrome.devtools.panels.create('OpenSumi', 'logo.png', 'panel.html');
       }
     }
   });
