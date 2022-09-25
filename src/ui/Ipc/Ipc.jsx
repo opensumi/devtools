@@ -6,6 +6,7 @@ import JsonView from 'react-json-view';
 import NoMessageSelected from '../NoMessageSelected/NoMessageSelected';
 import { generateColumns } from './rdgHelper';
 import { startCapturingIpc, stopCapturingIpc, getIpcMessages } from '../../capturer/ipc';
+import { updateMessages, getParsedMessage } from './messageHelper';
 
 import './Ipc.scss';
 import '../react-tabs.scss';
@@ -20,9 +21,10 @@ const Ipc = ({ isCompact }) => {
   const [bottomRow, setBottomRow] = useState(-1);
   const [autoScroll, setAutoScroll] = useState(true);
   const [filters, setFilters] = useState({
-    ipcMethod: '',
+    type: '',
     channel: '',
-    arguments: '',
+    send: '',
+    receive: '',
     enabled: false,
   });
   const [channels, setChannels] = useState([]); // all channels in messages
@@ -60,40 +62,36 @@ const Ipc = ({ isCompact }) => {
       })
       .filter((r) => {
         return (
-          (filters.ipcMethod ? r.ipcMethod && r.ipcMethod === filters.ipcMethod : true) &&
+          (filters.type ? r.type && r.type === filters.type : true) &&
           (filters.channel ? r.channel && r.channel === filters.channel : true) &&
-          (filters.arguments ? r.arguments && r.arguments.includes(filters.arguments) : true)
+          (filters.send ? r.send && r.send.includes(filters.send) : true) &&
+          (filters.receive ? r.receive && r.receive.includes(filters.receive) : true)
         );
       });
   }, [messages, filters]);
 
   const addMessages = () => {
     getIpcMessages()
-      .then((messages) => {
-        const newMessages = messages.map((message) => {
-          return {
-            time: message.time,
-            ipcMethod: message.ipcMethod,
-            channel: message.channel,
-            arguments: JSON.stringify(message.arguments),
-          };
-        });
+      .then((newRawMessages) => {
+        let newMsgs = [];
 
         // since addMessages is called from setInterval, if we read messages
         // directly we will always get an empty array. use setMessages to get
         // the latest messages (oldMessages) instead.
         setMessages((oldMessages) => {
-          return [...oldMessages, ...newMessages];
+          const { updatedMessages, newMessages } = updateMessages(oldMessages, newRawMessages);
+          newMsgs = newMessages;
+          return [...updatedMessages, ...newMessages];
         });
 
-        if (messages.length > 0) {
+        if (newMsgs.length > 0) {
           // add to filter options set
-          messages.forEach((msg) => {
+          newMsgs.forEach((msg) => {
             channelsRef.current.add(msg.channel);
           });
 
           // for auto scroll
-          setBottomRow((oldBottomRow) => oldBottomRow + messages.length);
+          setBottomRow((oldBottomRow) => oldBottomRow + newMsgs.length);
         }
       })
       .catch((error) => {
@@ -150,9 +148,10 @@ const Ipc = ({ isCompact }) => {
 
   const clearFilters = () => {
     setFilters({
-      ipcMethod: '',
+      type: '',
       channel: '',
-      arguments: '',
+      send: '',
+      receive: '',
       enabled: filters.enabled ? true : false,
     });
   };
@@ -208,14 +207,29 @@ const Ipc = ({ isCompact }) => {
         <div>
           <Tabs forceRenderTabPanel={true}>
             <TabList>
-              <Tab>Arguments</Tab>
+              <Tab>Send</Tab>
+              <Tab>Receive</Tab>
             </TabList>
 
             <TabPanel>
               {selectedRow ? (
                 <JsonView
                   style={rjvStyles}
-                  src={JSON.parse(selectedRow.arguments)}
+                  src={getParsedMessage(selectedRow, 'send')}
+                  name={false}
+                  collapsed={1}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                />
+              ) : (
+                <NoMessageSelected />
+              )}
+            </TabPanel>
+            <TabPanel>
+              {selectedRow ? (
+                <JsonView
+                  style={rjvStyles}
+                  src={getParsedMessage(selectedRow, 'receive')}
                   name={false}
                   collapsed={1}
                   displayDataTypes={false}

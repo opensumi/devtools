@@ -43,11 +43,11 @@ const generateColumns = (FilterContext, setFilters, channels) => {
       headerCellClass: 'rdg-header-cell',
     },
     {
-      key: 'ipcMethod',
-      name: 'IPC Method',
-      minWidth: 100,
-      width: 150,
-      cellClass: 'rdg-body-cell',
+      key: 'type',
+      name: 'Type',
+      minWidth: 40,
+      width: 50,
+      cellClass: 'rdg-body-cell column-type',
       headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
@@ -55,18 +55,15 @@ const generateColumns = (FilterContext, setFilters, channels) => {
             <select
               {...rest}
               className='filter'
-              value={filters.ipcMethod}
+              value={filters.type}
               onChange={(e) => {
-                setFilters({ ...filters, ipcMethod: e.target.value });
+                setFilters({ ...filters, type: e.target.value });
               }}
             >
               <option value=''>All</option>
-              <option value='ipcMain.on'>ipcMain.on</option>
-              <option value='ipcMain.handle'>ipcMain.handle</option>
-              <option value='ipcRenderer.on'>ipcRenderer.on</option>
-              <option value='ipcRenderer.send'>ipcRenderer.send</option>
-              <option value='ipcRenderer.sendSync'>ipcRenderer.sendSync</option>
-              <option value='ipcRenderer.invoke'>ipcRenderer.invoke</option>
+              <option value='↑'>↑</option>
+              <option value='↓'>↓</option>
+              <option value='↑↓'>↑↓</option>
             </select>
           )}
         </FilterRenderer>
@@ -103,8 +100,8 @@ const generateColumns = (FilterContext, setFilters, channels) => {
       ),
     },
     {
-      key: 'arguments',
-      name: 'Arguments',
+      key: 'send',
+      name: 'Send',
       cellClass: 'rdg-body-cell',
       headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
@@ -113,9 +110,30 @@ const generateColumns = (FilterContext, setFilters, channels) => {
             <input
               {...rest}
               className='filter'
-              value={filters.arguments}
+              value={filters.send}
               onChange={(e) => {
-                setFilters({ ...filters, arguments: e.target.value });
+                setFilters({ ...filters, send: e.target.value });
+              }}
+              onKeyDown={inputStopPropagation}
+            />
+          )}
+        </FilterRenderer>
+      ),
+    },
+    {
+      key: 'receive',
+      name: 'Receive',
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell filter-cell',
+      headerRenderer: (p) => (
+        <FilterRenderer {...p}>
+          {({ filters, ...rest }) => (
+            <input
+              {...rest}
+              className='filter'
+              value={filters.receive}
+              onChange={(e) => {
+                setFilters({ ...filters, receive: e.target.value });
               }}
               onKeyDown={inputStopPropagation}
             />
