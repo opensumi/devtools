@@ -1,3 +1,173 @@
 body {
   margin: 0;
 }
+
+.devtool-toggle.rpc {
+  position: absolute;
+  width: 70px;
+  height: 22px;
+  margin: 3px;
+  cursor: pointer;
+  border-radius: 100px;
+  border: 1px solid rgba(44, 87, 119, 0.3);
+  background-color: rgba(44, 87, 119, 0.1);
+  transition: all 100;
+  &:hover:not(.moving) {
+    &:after {
+      background-color: rgba(166, 199, 228, 0.6);
+    }
+  }
+  &:after {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 30px;
+    line-height: 14px;
+    text-align: center;
+    font-size: 12px;
+    background-color: rgba(160, 199, 228, 0.8);
+    border: 1px solid rgba(44, 87, 119, 0.6);
+    transition: all 100ms;
+  }
+  &:after {
+    content: 'RPC';
+    border-radius: 50px 50px 50px 50px;
+    color: rgba(44, 87, 119, 0.9);
+  }
+  &.moving {
+    &:after {
+      color: transparent;
+      transition: color 0s, transform 100ms, border-radius 100ms, background-color 100ms;
+    }
+  }
+}
+
+.devtool-toggle.ipc {
+  position: absolute;
+  width: 70px;
+  height: 22px;
+  margin: 3px;
+  cursor: pointer;
+  border-radius: 100px;
+  border: 1px solid rgba(10, 11, 12, 0.2);
+  background-color: rgba(10, 11, 12, 0.1);
+  transition: all 100;
+  &:hover:not(.moving) {
+    &:after {
+      background-color: rgba(10, 11, 12, 0.15);
+    }
+  }
+  &:after {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 30px;
+    line-height: 14px;
+    text-align: center;
+    font-size: 12px;
+    background-color: rgba(10, 11, 12, 0.2);
+    border: 1px solid rgba(10, 11, 12, 0.4);
+    transition: all 100ms;
+  }
+  &:after {
+    content: 'IPC';
+    border-radius: 50px 50px 50px 50px;
+    transform: translate(100%, 0);
+    color: rgba(10, 11, 12, 0.6);
+  }
+  &.moving {
+    &:after {
+      color: transparent;
+      transition: color 0s, transform 100ms, border-radius 100ms, background-color 100ms;
+    }
+  }
+}
+
+.devtool-container {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  &.show {
+    visibility: visible;
+  }
+  &.hide {
+    visibility: hidden;
+  }
+}
+
+.statbar {
+  height: 28px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.toolbar {
+  display: flex;
+  margin: 3px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 5px;
+
+  &.electron {
+    margin-left: 80px;
+  }
+}
+
+.toolbar-text {
+  margin-left: 5px;
+}
+
+.toolbar-icon {
+  margin-top: 1px;
+  width: 13px;
+  height: 13px;
+  float: left;
+}
+
+.rdg {
+  border: 0;
+}
+
+.rdg-header-cell {
+  font-size: 12px;
+  font-weight: normal;
+  background-color: #f1f3f4;
+  border-color: #cacdd1;
+}
+
+.rdg-body-cell {
+  font-size: 12px;
+  font-family: monospace;
+  border-bottom: 0;
+  border-color: #cacdd1;
+
+  &.column-type {
+    text-align: center;
+  }
+}
+
+.filter-container {
+  .filter {
+    inline-size: 100%;
+    padding: 1px;
+    font-size: 12px;
+  }
+
+  .filter-cell {
+    line-height: 25px;
+    padding: 0;
+
+    > div {
+      padding-block: 0;
+      padding-inline: 8px;
+
+      &:first-child {
+        border-block-end: 1px solid var(--rdg-border-color);
+      }
+    }
+  }
+}

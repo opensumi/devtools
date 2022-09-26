@@ -1,22 +1,22 @@
 import evalInWindow from '../utils/eval.js';
 
-const startCapturing = () => {
+const startCapturingRpc = () => {
   return evalInWindow(() => {
     // Return if messages are already being listened to prevent duplicates
     // when reloading the extension
-    if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages != null) {
-      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages = [];
+    if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages != null) {
+      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages = [];
       return;
     }
 
-    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages = [];
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages = [];
 
-    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.capture = (message) => {
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.captureRPC = (message) => {
       if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.evaling) return;
 
       // if the length of messages is greater than 9999, devtools window
       // is regarded to be closed in capturing state. So stop capturing.
-      if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages.length > 9999) {
+      if (window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages.length > 9999) {
         window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__ = {};
         return;
       }
@@ -55,7 +55,7 @@ const startCapturing = () => {
         }
       }
 
-      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages.push(msg);
+      window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages.push(msg);
     };
 
     // send notification to opensumi core by custom event
@@ -68,7 +68,7 @@ const startCapturing = () => {
   });
 };
 
-const stopCapturing = () => {
+const stopCapturingRpc = () => {
   return evalInWindow(() => {
     const latencyEvent = new CustomEvent('devtools:latency', {
       detail: {
@@ -77,22 +77,23 @@ const stopCapturing = () => {
     });
     window.dispatchEvent(latencyEvent);
 
-    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__ = {};
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages = undefined;
+    window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.captureRPC = undefined;
   });
 };
 
-const getMessages = () => {
+const getRpcMessages = () => {
   return evalInWindow(() => {
-    const messages = window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages;
+    const messages = window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages;
     // clear messages after getting them each time
-    if (messages) window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.messages = [];
+    if (messages) window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.RPCMessages = [];
     return messages;
   }).then((messages) => {
     if (messages) return messages;
 
     // Start listening for messages if array is missing meaning
     // the window was reloaded
-    return startCapturing().then(() => []);
+    return startCapturingRpc().then(() => []);
   });
 };
 
@@ -104,4 +105,4 @@ const getLatency = () => {
   });
 };
 
-export { startCapturing, stopCapturing, getMessages, getLatency };
+export { startCapturingRpc, stopCapturingRpc, getRpcMessages, getLatency };

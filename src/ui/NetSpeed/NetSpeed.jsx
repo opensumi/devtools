@@ -11,11 +11,11 @@ const NetSpeed = ({ capturing, upload, download }) => {
   return (
     <div className='netspeed'>
       <div>
-        <span className='netspeed-icon icon-upload'></span>
+        <span className='netspeed-icon rpc-icon-upload'></span>
         <span>{uploadSpeed.number}</span> <span>{uploadSpeed.unit}</span>
       </div>
       <div>
-        <span className='netspeed-icon icon-download'></span>
+        <span className='netspeed-icon rpc-icon-download'></span>
         <span>{downloadSpeed.number}</span> <span>{downloadSpeed.unit}</span>
       </div>
     </div>

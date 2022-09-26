@@ -1,0 +1,71 @@
+.ipc-toolbar-button {
+  flex-shrink: 0;
+  -webkit-font-smoothing: antialiased;
+  background-color: rgba(10, 11, 12, 0.1);
+  border-radius: 3px;
+  border: 1px solid rgba(10, 11, 12, 0.3);
+  box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: rgba(10, 11, 12, 0.6);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  margin: 0;
+  outline: none;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: rgba(10, 11, 12, 0.15);
+    color: rgba(10, 11, 12, 0.7);
+  }
+
+  &.active {
+    background-color: rgba(10, 11, 12, 0.25);
+    color: rgba(10, 11, 12, 0.7);
+    box-shadow: none;
+  }
+}
+
+.ipc-icon-record {
+  background: url('../../assets/icons/orange/record.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.ipc-icon-clear {
+  background: url('../../assets/icons/orange/clear.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.ipc-icon-bottom {
+  background: url('../../assets/icons/orange/bottom.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.ipc-icon-filter {
+  background: url('../../assets/icons/orange/filter.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.ipc-icon-reset {
+  background: url('../../assets/icons/orange/reset.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

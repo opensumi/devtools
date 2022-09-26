@@ -23,7 +23,7 @@ const ResizableTable = ({ children }) => {
 
   useEffect(() => {
     setTableHeight(tableElement.current.offsetHeight);
-  }, []);
+  });
 
   const mouseDown = () => {
     setHandleStatus('active');
@@ -74,7 +74,7 @@ const ResizableTable = ({ children }) => {
     <table className='rt-table' ref={tableElement}>
       <thead>
         <tr>
-          <td id='rt-td1' ref={ref1}>
+          <td className='rt-td1' ref={ref1}>
             {children[0]}
             <div
               style={{ height: tableHeight }}
