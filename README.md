@@ -42,7 +42,7 @@ Users are allowed to:
 
 ## Install
 
-> IMPORTANT: developers should [enable](https://opensumi.com/) `devtools` support in their OpenSumi-based IDE products first, otherwise this extension won't work!
+> IMPORTANT: The devtools supports must be [enabled](https://opensumi.com/en/docs/integrate/browser-extension/opensumi-devtools#integrate) in OpenSumi first, otherwise this extension won't work!
 
 Users can install OpenSumi DevTools either from **Chrome webstore** or from **a local folder**.
 
