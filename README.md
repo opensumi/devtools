@@ -91,7 +91,7 @@ In the following way, users can install other versions of OpenSumi DevTools exce
 2. Unzip it and get a folder
 3. Vist chrome [extensions](chrome://extensions/) page and check "Developer mode"
 4. Click "Load unpacked extension" and select the folder
-5. Open DevTools in your page and have fun!
+5. Open DevTools in your page and you will see it!
 
 **Electron**
 
@@ -113,7 +113,7 @@ electronApp.init().then(() => {
   session.defaultSession.loadExtension(opensumiDevtoolsPath);
 });
 ```
-4. Open DevTools in your app and have fun!
+4. Open DevTools in your app and you will see it!
 
 ## Contributing
 
