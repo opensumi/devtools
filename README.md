@@ -46,7 +46,7 @@ Users are allowed to:
 
 Users can install OpenSumi DevTools either from **Chrome webstore** or from **a local folder**.
 
-### Install from Chrome webstore
+### Option 1: Install from Chrome webstore
 
 This way is easier and more recommended.
 
@@ -81,7 +81,7 @@ electronApp.init().then(() => {
 ```
 4. Open DevTools in your app and you will see it!
 
-### Install from a folder
+### Option 2: Install from a folder
 
 In the following way, users can install other versions of OpenSumi DevTools except for the one that published in Chrome webstore.
 
