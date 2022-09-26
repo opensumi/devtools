@@ -1,6 +1,6 @@
 # OpenSumi DevTools
 
-A Chrome DevTools Extension for any [OpenSumi](https://github.com/opensumi/core) based IDE.
+A Chrome DevTools Extension for any [OpenSumi](https://github.com/opensumi/core) based IDE. (see [Demo](https://user-images.githubusercontent.com/32434520/192297610-208f1332-76cd-4776-b75c-53981dfd1eb1.gif))
 
 <table>
   <thead>
