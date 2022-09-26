@@ -79,13 +79,13 @@ electronApp.init().then(() => {
   });
 });
 ```
-4. Open DevTools in your app and you will see it!
+3. Open DevTools in your app and you will see it!
 
 ### Option 2: Install from a folder
 
 In the following way, users can install other versions of OpenSumi DevTools except for the one that published in Chrome webstore.
 
-**Web**
+**Web client**
 
 1. Download `opensumi-devtools-vx.x.x.zip` from [releases](https://github.com/opensumi/devtools/releases)
 2. Unzip it and get a folder
@@ -93,7 +93,7 @@ In the following way, users can install other versions of OpenSumi DevTools exce
 4. Click "Load unpacked extension" and select the folder
 5. Open DevTools in your page and you will see it!
 
-**Electron**
+**Electron client**
 
 1. Download `opensumi-devtools-vx.x.x.zip` from [releases](https://github.com/opensumi/devtools/releases)
 2. Unzip it and get a folder
