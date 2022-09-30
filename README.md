@@ -1,6 +1,6 @@
 # OpenSumi DevTools
 
-A Chrome DevTools Extension for any [OpenSumi](https://github.com/opensumi/core) based IDE.
+A Chrome DevTools Extension for any [OpenSumi](https://github.com/opensumi/core) based IDE. (see [Demo](https://user-images.githubusercontent.com/32434520/192297610-208f1332-76cd-4776-b75c-53981dfd1eb1.gif))
 
 <table>
   <thead>
@@ -13,12 +13,12 @@ A Chrome DevTools Extension for any [OpenSumi](https://github.com/opensumi/core)
     <tr>
       <td>
         <img
-          src="https://user-images.githubusercontent.com/32434520/186371187-dc68ccb0-76d5-4731-8a15-1e122a927931.png"
+          src="https://user-images.githubusercontent.com/32434520/192236137-fa3495a7-3999-416c-ad59-9a6aa8a2e2d0.png"
         />
       </td>
       <td>
         <img
-          src="https://user-images.githubusercontent.com/32434520/186371624-675d51f8-429f-4612-89f3-e9ee45f22a1b.png"
+          src="https://user-images.githubusercontent.com/32434520/192235671-52dfe310-21a6-40f9-8c39-1582daddfc30.png"
         />
       </td>
     </tr>
@@ -27,34 +27,73 @@ A Chrome DevTools Extension for any [OpenSumi](https://github.com/opensumi/core)
 
 ## Features
 
-Currently OpenSumi DevTools focuses on message capturing and presenting:
+Currently OpenSumi DevTools focuses on messages capturing and presenting:
 
-- [x] OpenSumi RPC messages
-- [ ] Electron IPC messages (working on it...)
+- [x] RPC messages between frontend and backend
+- [x] IPC messages between Electron processes (Electron client only)
 
 Users are allowed to:
 
-- [x] toggle capturing
-- [x] filter messages
-- [x] viewing parsed messages
-- [x] detect message netspeed
-- [x] detect network latency
-- [ ] ...
-
+- [x] Toggle capturing
+- [x] Filter messages
+- [x] View parsed messages
+- [x] Check communication traffic
+- [x] Check network latency
 
 ## Install
 
-Before we publish it to chrome webstore, you can install OpenSumi DevTools in your OpenSumi based Web/Electron IDE by steps below:
+> IMPORTANT: The devtools supports must be [enabled](https://opensumi.com/en/docs/integrate/browser-extension/opensumi-devtools#integrate) in OpenSumi first, otherwise this extension won't work!
 
-**Web**
+Users can install OpenSumi DevTools either from **Chrome webstore** or from **a local folder**.
+
+### Option 1: Install from Chrome webstore
+
+This way is easier and more recommended.
+
+**Web client**
+
+1. Visit the extension in [Chrome webstore](https://chrome.google.com/webstore/detail/opensumi-devtools/ombdblngipgeakodomcednfdiabohmgl) and install it to your browser
+2. Open DevTools in your page and you will see it!
+
+**Electron client**
+
+1. Install [electron-devtools-installer](https://www.npmjs.com/package/electron-devtools-installer) to your project
+2. In your Electron app's entry point do similar things like below:
+
+```javascript
+import { app, session } from 'electron';
+import installExtension from 'electron-devtools-installer';
+
+import { ElectronMainApp } from '@opensumi/ide-core-electron-main';
+
+const electronApp = new ElectronMainApp({
+  ...
+});
+
+const OPENSUMI_DEVTOOLS_CHROME_WEBSTORE_ID = 'ombdblngipgeakodomcednfdiabohmgl';
+
+electronApp.init().then(() => {
+  ...
+  app.whenReady().then(() => {
+    installExtension(OPENSUMI_DEVTOOLS_CHROME_WEBSTORE_ID);
+  });
+});
+```
+3. Open DevTools in your app and you will see it!
+
+### Option 2: Install from a folder
+
+In the following way, users can install other versions of OpenSumi DevTools except for the one that published in Chrome webstore.
+
+**Web client**
 
 1. Download `opensumi-devtools-vx.x.x.zip` from [releases](https://github.com/opensumi/devtools/releases)
 2. Unzip it and get a folder
 3. Vist chrome [extensions](chrome://extensions/) page and check "Developer mode"
 4. Click "Load unpacked extension" and select the folder
-5. Open DevTools in your page and have fun!
+5. Open DevTools in your page and you will see it!
 
-**Electron**
+**Electron client**
 
 1. Download `opensumi-devtools-vx.x.x.zip` from [releases](https://github.com/opensumi/devtools/releases)
 2. Unzip it and get a folder
@@ -74,9 +113,8 @@ electronApp.init().then(() => {
   session.defaultSession.loadExtension(opensumiDevtoolsPath);
 });
 ```
-4. Open DevTools in your app and have fun!
+4. Open DevTools in your app and you will see it!
 
-Things will get easier after we publish the extension to chrome store. Stay tuned!
 ## Contributing
 
 Please read [CONTRIBUTING](./CONTRIBUTING.md) if you are new here or not familiar with the basic rules of Git/GitHub world.
