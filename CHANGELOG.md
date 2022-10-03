@@ -1,4 +1,18 @@
-# 1.1.0 (2022-08-24)
+# [1.2.0](https://github.com/opensumi/devtools/compare/v1.1.0...v1.2.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* EOL on windows conflicts with `yarn run prettier` ([#10](https://github.com/opensumi/devtools/issues/10)) ([7aedb42](https://github.com/opensumi/devtools/commit/7aedb423b0dfca1d961f3df5733f5701ed6f5975))
+
+
+### Features
+
+* Electron IPC messages view ([#5](https://github.com/opensumi/devtools/issues/5)) ([a561850](https://github.com/opensumi/devtools/commit/a561850d4511852f30b46597588da4e955e53bf7))
+
+
+
+# [1.1.0](https://github.com/opensumi/devtools/compare/a250e665efcb75375b8a5f4962f123551e013264...v1.1.0) (2022-08-24)
 
 
 ### Bug Fixes
