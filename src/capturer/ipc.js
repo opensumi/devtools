@@ -21,14 +21,12 @@ const startCapturingIpc = () => {
         return;
       }
 
-      const msg = {
-        time: new Date().toLocaleString().split(' ')[1],
-        ipcMethod: message.ipcMethod,
-        channel: message.channel,
-      };
-      if (message.requestId) msg.requestId = message.requestId;
-      if (message.args) msg.arguments = message.args;
-      if (message.result) msg.result = message.result;
+      const msg = Object.assign(
+        {
+          time: new Date().toLocaleString().split(' ')[1],
+        },
+        message,
+      );
 
       window.__OPENSUMI_DEVTOOLS_GLOBAL_HOOK__.IPCMessages.push(msg);
     };
