@@ -11,7 +11,7 @@ const commonColumnProperties = {
   resizable: true,
 };
 
-const generateColumns = (FilterContext, setFilters, channels) => {
+const generateColumns = (FilterContext, setFilters, services, methods) => {
   const FilterRenderer = ({ isCellSelected, column, children }) => {
     const filters = useContext(FilterContext);
     const { ref, tabIndex } = useFocusRef(isCellSelected);
@@ -61,7 +61,6 @@ const generateColumns = (FilterContext, setFilters, channels) => {
               }}
             >
               <option value=''>All</option>
-              <option value='↑'>↑</option>
               <option value='↓'>↓</option>
               <option value='↑↓'>↑↓</option>
             </select>
@@ -70,9 +69,9 @@ const generateColumns = (FilterContext, setFilters, channels) => {
       ),
     },
     {
-      key: 'channel',
-      name: 'Channel',
-      width: 250,
+      key: 'service',
+      name: 'Service',
+      width: 180,
       cellClass: 'rdg-body-cell',
       headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
@@ -81,17 +80,47 @@ const generateColumns = (FilterContext, setFilters, channels) => {
             <select
               {...rest}
               className='filter'
-              value={filters.channel}
+              value={filters.service}
               onChange={(e) => {
-                setFilters({ ...filters, channel: e.target.value });
+                setFilters({ ...filters, service: e.target.value });
               }}
             >
               <option value=''>All</option>
-              {Array.from(channels)
+              {Array.from(services)
                 .sort()
-                .map((channel) => (
-                  <option key={channel} value={channel}>
-                    {channel}
+                .map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+            </select>
+          )}
+        </FilterRenderer>
+      ),
+    },
+    {
+      key: 'method',
+      name: 'Method',
+      width: 120,
+      cellClass: 'rdg-body-cell',
+      headerCellClass: 'rdg-header-cell filter-cell',
+      headerRenderer: (p) => (
+        <FilterRenderer {...p}>
+          {({ filters, ...rest }) => (
+            <select
+              {...rest}
+              className='filter'
+              value={filters.method}
+              onChange={(e) => {
+                setFilters({ ...filters, method: e.target.value });
+              }}
+            >
+              <option value=''>All</option>
+              {Array.from(methods)
+                .sort()
+                .map((m) => (
+                  <option key={m} value={m}>
+                    {m}
                   </option>
                 ))}
             </select>

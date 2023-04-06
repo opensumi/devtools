@@ -7,7 +7,7 @@ export const checkElectron = () => {
       return electronEnv;
     }
   }).then((electronEnv) => {
-    if (electronEnv && electronEnv.metadata.devtools) {
+    if (electronEnv) {
       return true;
     } else {
       return false;
