@@ -22,17 +22,20 @@ const Ipc = ({ isCompact }) => {
   const [autoScroll, setAutoScroll] = useState(true);
   const [filters, setFilters] = useState({
     type: '',
-    channel: '',
+    service: '',
+    method: '',
     send: '',
     receive: '',
     enabled: false,
   });
-  const [channels, setChannels] = useState([]); // all channels in messages
+  const [services, setServices] = useState([]); // all kinds of services in messages
+  const [methods, setMethods] = useState([]); // all kinds of methods in messages
   const [selectedRow, setSelectedRow] = useState();
 
   const timer = useRef(null);
   const gridRef = useRef(null);
-  const channelsRef = useRef(new Set()); // we need ref to get old values in all renders
+  const servicesRef = useRef(new Set()); // we need ref to get old values in all renders
+  const methodsRef = useRef(new Set());
 
   useEffect(() => {
     toggleCapturing();
@@ -46,13 +49,16 @@ const Ipc = ({ isCompact }) => {
   // it is not very elegent to use two variables to store same thing
   // but can prevent unnecessary render that will disrupt users when
   // they are selecting options from <select>
-  if (channels.length !== channelsRef.current.size) {
-    setChannels(Array.from(channelsRef.current));
+  if (services.length !== servicesRef.current.size) {
+    setServices(Array.from(servicesRef.current));
+  }
+  if (methods.length !== methodsRef.current.size) {
+    setMethods(Array.from(methodsRef.current));
   }
 
   const columns = useMemo(() => {
-    return generateColumns(FilterContext, setFilters, channels);
-  }, [setFilters, channels]);
+    return generateColumns(FilterContext, setFilters, services, methods);
+  }, [setFilters, services, methods]);
 
   const filteredRows = useMemo(() => {
     return messages
@@ -63,7 +69,8 @@ const Ipc = ({ isCompact }) => {
       .filter((r) => {
         return (
           (filters.type ? r.type && r.type === filters.type : true) &&
-          (filters.channel ? r.channel && r.channel === filters.channel : true) &&
+          (filters.service ? r.service && r.service === filters.service : true) &&
+          (filters.method ? r.method && r.method === filters.method : true) &&
           (filters.send ? r.send && r.send.includes(filters.send) : true) &&
           (filters.receive ? r.receive && r.receive.includes(filters.receive) : true)
         );
@@ -87,7 +94,8 @@ const Ipc = ({ isCompact }) => {
         if (newMsgs.length > 0) {
           // add to filter options set
           newMsgs.forEach((msg) => {
-            channelsRef.current.add(msg.channel);
+            servicesRef.current.add(msg.service);
+            methodsRef.current.add(msg.method);
           });
 
           // for auto scroll
@@ -103,8 +111,10 @@ const Ipc = ({ isCompact }) => {
   const clearMessages = () => {
     setMessages([]);
     // should also clear filter options
-    setChannels([]);
-    channelsRef.current.clear();
+    setServices([]);
+    setMethods([]);
+    servicesRef.current.clear();
+    methodsRef.current.clear();
     setSelectedRow(null);
   };
 
@@ -149,7 +159,8 @@ const Ipc = ({ isCompact }) => {
   const clearFilters = () => {
     setFilters({
       type: '',
-      channel: '',
+      service: '',
+      method: '',
       send: '',
       receive: '',
       enabled: filters.enabled ? true : false,
