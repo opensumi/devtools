@@ -263,6 +263,9 @@ const Rpc = ({ isCompact, isElectron }) => {
             onRowClick={(row) => {
               setSelectedRow(row);
             }}
+            onCellClick={(cell) => {
+              console.log(`🚀 ~ Rpc ~ cell:`, cell);
+            }}
           />
         </FilterContext.Provider>
         <div>

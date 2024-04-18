@@ -156,6 +156,9 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       name: 'Receive',
       cellClass: 'rdg-body-cell',
       headerCellClass: 'rdg-header-cell filter-cell',
+      onclick: (e) => {
+        console.log('clicked');
+      },
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
           {({ filters, ...rest }) => (
