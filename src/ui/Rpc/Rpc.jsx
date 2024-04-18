@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, createContext } from 'reac
 import ResizableTable from '../ResizableTable/ResizableTable';
 import NetSpeed from '../NetSpeed/NetSpeed';
 import NetLatency from '../NetLatency/NetLatency';
+import 'react-data-grid/lib/styles.css';
 import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import JsonView from 'react-json-view';
@@ -38,6 +39,7 @@ const Rpc = ({ isCompact, isElectron }) => {
     send: 0, // the unit is bytes/s
     receive: 0,
   });
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [latency, setLatency] = useState(null);
 
   const timer = useRef(null);
@@ -51,7 +53,7 @@ const Rpc = ({ isCompact, isElectron }) => {
 
   // run if autoScroll or bottomRow changes
   useEffect(() => {
-    gridRef.current && autoScroll && gridRef.current.scrollToRow(bottomRow);
+    gridRef.current && autoScroll && gridRef.current.scrollToCell({ rowIdx: bottomRow });
   }, [autoScroll, bottomRow]);
 
   // it is not very elegent to use two variables to store same thing
@@ -260,13 +262,29 @@ const Rpc = ({ isCompact, isElectron }) => {
             rowKeyGetter={(row) => row.id}
             headerRowHeight={filters.enabled ? 52 : 25}
             rowHeight={20}
-            onRowClick={(row) => {
-              setSelectedRow(row);
+            onCellClick={(cell) => {
+              if (cell.column) {
+                const { key } = cell.column;
+                if (key === 'send') {
+                  setSelectedTabIndex(0);
+                } else if (key === 'receive') {
+                  setSelectedTabIndex(1);
+                }
+              }
+              if (cell.row) {
+                setSelectedRow(cell.row);
+              }
             }}
           />
         </FilterContext.Provider>
         <div>
-          <Tabs forceRenderTabPanel={true}>
+          <Tabs
+            forceRenderTabPanel={true}
+            selectedIndex={selectedTabIndex}
+            onSelect={(index) => {
+              setSelectedTabIndex(index);
+            }}
+          >
             <TabList>
               <Tab>Send</Tab>
               <Tab>Receive</Tab>

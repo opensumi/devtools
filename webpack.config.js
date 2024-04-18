@@ -13,16 +13,12 @@ const __dirname = dirname(__filename);
 
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 
-const alias = {
-  'react-dom': '@hot-loader/react-dom',
-  'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
-  'react/jsx-runtime': 'react/jsx-runtime.js',
-};
-
 // load the secrets
 const secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
 
 const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
+
+const alias = {};
 
 if (fileSystem.existsSync(secretsPath)) {
   alias['secrets'] = secretsPath;

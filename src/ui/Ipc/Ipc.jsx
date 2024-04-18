@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, createContext } from 'react';
 import ResizableTable from '../ResizableTable/ResizableTable';
+import 'react-data-grid/lib/styles.css';
 import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import JsonView from 'react-json-view';
@@ -43,7 +44,7 @@ const Ipc = ({ isCompact }) => {
 
   // run if autoScroll or bottomRow changes
   useEffect(() => {
-    gridRef.current && autoScroll && gridRef.current.scrollToRow(bottomRow);
+    gridRef.current && autoScroll && gridRef.current.scrollToCell({ rowIdx: bottomRow });
   }, [autoScroll, bottomRow]);
 
   // it is not very elegent to use two variables to store same thing

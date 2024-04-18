@@ -30,6 +30,7 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       name: 'ID',
       minWidth: 40,
       width: 50,
+      maxWidth: 70,
       cellClass: 'rdg-body-cell',
       headerCellClass: 'rdg-header-cell',
       frozen: true,
@@ -39,6 +40,7 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       name: 'Time',
       minWidth: 75,
       width: 75,
+      maxWidth: 100,
       cellClass: 'rdg-body-cell',
       headerCellClass: 'rdg-header-cell',
     },
@@ -47,6 +49,7 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
       name: 'Type',
       minWidth: 40,
       width: 50,
+      maxWidth: 70,
       cellClass: 'rdg-body-cell column-type',
       headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
@@ -133,6 +136,7 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
     {
       key: 'send',
       name: 'Send',
+      width: 150,
       cellClass: 'rdg-body-cell',
       headerCellClass: 'rdg-header-cell filter-cell',
       headerRenderer: (p) => (
@@ -154,8 +158,12 @@ const generateColumns = (FilterContext, setFilters, services, methods) => {
     {
       key: 'receive',
       name: 'Receive',
+      width: 150,
       cellClass: 'rdg-body-cell',
       headerCellClass: 'rdg-header-cell filter-cell',
+      onclick: (e) => {
+        console.log('clicked');
+      },
       headerRenderer: (p) => (
         <FilterRenderer {...p}>
           {({ filters, ...rest }) => (

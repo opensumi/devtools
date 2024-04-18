@@ -2,6 +2,11 @@ const serviceMethodSplit = (serviceMethod) => {
   if (serviceMethod.startsWith('on')) {
     serviceMethod = serviceMethod.slice(3);
   }
+  if (serviceMethod.includes('||')) {
+    // for ExtProtocol
+    return serviceMethod.split('||');
+  }
+
   return serviceMethod.split(':');
 };
 
@@ -56,7 +61,7 @@ const updateMessages = (oldMessages, newRawMessages) => {
       msg.method = serviceMethodSplitResult[1];
       msg.receive = JSON.stringify(message.arguments);
     } else if (msg.type === 'onRequest') {
-      msg.type = '↓↑';
+      msg.type = '↓';
       msg.requestId = message.requestId;
       msg.service = serviceMethodSplitResult[0];
       msg.method = serviceMethodSplitResult[1];
