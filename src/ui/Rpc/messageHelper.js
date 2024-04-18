@@ -2,6 +2,11 @@ const serviceMethodSplit = (serviceMethod) => {
   if (serviceMethod.startsWith('on')) {
     serviceMethod = serviceMethod.slice(3);
   }
+  if (serviceMethod.includes('||')) {
+    // for ExtProtocol
+    return serviceMethod.split('||');
+  }
+
   return serviceMethod.split(':');
 };
 
