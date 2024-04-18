@@ -1,3 +1,19 @@
+# [1.3.0](https://github.com/opensumi/devtools/compare/v1.2.1...v1.3.0) (2024-04-18)
+
+
+### Bug Fixes
+
+* ext protocol ([036bde0](https://github.com/opensumi/devtools/commit/036bde091531ffba1c4a972695d8384d89baccac))
+
+
+### Features
+
+* optimize row ([a249876](https://github.com/opensumi/devtools/commit/a249876893c709ff6d8cf938553124d5aa201360))
+* support auto switch cols ([f7b247d](https://github.com/opensumi/devtools/commit/f7b247da86fc8ebe94cec1ed3c56a48cfd66b093))
+* update react 18 ([642946e](https://github.com/opensumi/devtools/commit/642946ed9fb4b3a8e6478473ab58cb4fbf5ae7b0))
+
+
+
 ## [1.2.1](https://github.com/opensumi/devtools/compare/v1.2.0...v1.2.1) (2023-04-11)
 
 
