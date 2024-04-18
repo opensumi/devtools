@@ -4,10 +4,7 @@
   "type": "module",
   "description": "A Chrome DevTools Extension for OpenSumi.",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
+  "repository": "git@github.com:opensumi/devtools.git",
   "scripts": {
     "build": "cross-env NODE_ENV='production' BABEL_ENV='production' node utils/build.js",
     "start": "cross-env NODE_ENV='development' BABEL_ENV='development' node utils/server.js",
@@ -17,10 +14,9 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@hot-loader/react-dom": "^17.0.2",
-    "react": "^17.0.2",
-    "react-data-grid": "^7.0.0-beta.13",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-data-grid": "^7.0.0-beta.43",
+    "react-dom": "^18.2.0",
     "react-hot-loader": "^4.13.0",
     "react-json-view": "^1.21.3",
     "react-tabs": "^4.2.1"
@@ -31,8 +27,8 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@types/chrome": "^0.0.177",
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
     "babel-preset-react-app": "^10.0.1",

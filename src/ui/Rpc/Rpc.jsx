@@ -51,7 +51,7 @@ const Rpc = ({ isCompact, isElectron }) => {
 
   // run if autoScroll or bottomRow changes
   useEffect(() => {
-    gridRef.current && autoScroll && gridRef.current.scrollToRow(bottomRow);
+    gridRef.current && autoScroll && gridRef.current.scrollToCell({ rowIdx: bottomRow });
   }, [autoScroll, bottomRow]);
 
   // it is not very elegent to use two variables to store same thing
