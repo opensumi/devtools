@@ -19,7 +19,7 @@
     "react-dom": "^18.2.0",
     "react-hot-loader": "^4.13.0",
     "react-json-view": "^1.21.3",
-    "react-tabs": "^4.2.1"
+    "react-tabs": "^6.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.17.0",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, createContext } from 'react';
 import ResizableTable from '../ResizableTable/ResizableTable';
+import 'react-data-grid/lib/styles.css';
 import DataGrid from 'react-data-grid';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import JsonView from 'react-json-view';
