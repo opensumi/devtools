@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/opensumi/devtools/compare/v1.3.0...v1.3.1) (2024-04-22)
+
+
+### Bug Fixes
+
+* msg type should be valid ([#20](https://github.com/opensumi/devtools/issues/20)) ([477948e](https://github.com/opensumi/devtools/commit/477948e6dafcec0e1925b2860e81f3f21d6ed211))
+
+
+
 # [1.3.0](https://github.com/opensumi/devtools/compare/v1.2.1...v1.3.0) (2024-04-18)
 
 
