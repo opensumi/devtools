@@ -10,6 +10,11 @@ const serviceMethodSplit = (serviceMethod) => {
   return serviceMethod.split(':');
 };
 
+const tSend = '↑';
+const tSendAndReceive = '↑↓';
+const tReceive = '↓';
+const tReceiveAndSend = '↓↑';
+
 const updateMessages = (oldMessages, newRawMessages) => {
   const newMessages = [];
   let sendBytes = 0;
@@ -36,18 +41,18 @@ const updateMessages = (oldMessages, newRawMessages) => {
     }
 
     if (msg.type === 'sendNotification') {
-      msg.type = '↑';
+      msg.type = tSend;
       msg.service = serviceMethodSplitResult[0];
       msg.method = serviceMethodSplitResult[1];
       msg.send = JSON.stringify(message.arguments);
     } else if (msg.type === 'sendRequest') {
-      msg.type = '↑↓';
+      msg.type = tSendAndReceive;
       msg.requestId = message.requestId;
       msg.service = serviceMethodSplitResult[0];
       msg.method = serviceMethodSplitResult[1];
       msg.send = JSON.stringify(message.arguments);
     } else if (msg.type === 'requestResult') {
-      msg.type = '↑↓';
+      msg.type = tSendAndReceive;
       msg.requestId = message.requestId;
       msg.status = message.status;
       if (msg.status === 'success') {
@@ -56,18 +61,18 @@ const updateMessages = (oldMessages, newRawMessages) => {
         msg.receive = JSON.stringify(message.error);
       }
     } else if (msg.type === 'onNotification') {
-      msg.type = '↓';
+      msg.type = tReceive;
       msg.service = serviceMethodSplitResult[0];
       msg.method = serviceMethodSplitResult[1];
       msg.receive = JSON.stringify(message.arguments);
     } else if (msg.type === 'onRequest') {
-      msg.type = '↓';
+      msg.type = tReceiveAndSend;
       msg.requestId = message.requestId;
       msg.service = serviceMethodSplitResult[0];
       msg.method = serviceMethodSplitResult[1];
       msg.receive = JSON.stringify(message.arguments);
     } else if (msg.type === 'onRequestResult') {
-      msg.type = '↓↑';
+      msg.type = tReceiveAndSend;
       msg.requestId = message.requestId;
       msg.status = message.status;
       if (msg.status === 'success') {
@@ -86,13 +91,13 @@ const updateMessages = (oldMessages, newRawMessages) => {
       receiveBytes += new Blob([msg.receive]).size;
     }
 
-    if (msg.type === '↑↓') {
+    if (msg.type === tSendAndReceive) {
       // merge requestResult row into corresponding sendRequest row
       let isCorrespondingRowInNewMessages = false;
       let isCorrespondingRowInMessages = false;
 
       for (let i = newMessages.length - 1; i >= 0; i--) {
-        if (newMessages[i].type === '↑↓') {
+        if (newMessages[i].type === tSendAndReceive) {
           if (newMessages[i].requestId === msg.requestId) {
             newMessages[i].receive = msg.receive;
             isCorrespondingRowInNewMessages = true;
@@ -103,7 +108,7 @@ const updateMessages = (oldMessages, newRawMessages) => {
 
       if (!isCorrespondingRowInNewMessages) {
         for (let i = oldMessages.length - 1; i >= 0; i--) {
-          if (oldMessages[i].type === '↑↓') {
+          if (oldMessages[i].type === tSendAndReceive) {
             if (oldMessages[i].requestId === msg.requestId) {
               updatedMessages[i] = structuredClone(oldMessages[i]);
               updatedMessages[i].receive = msg.receive;
@@ -118,13 +123,13 @@ const updateMessages = (oldMessages, newRawMessages) => {
       if (!isCorrespondingRowInNewMessages && !isCorrespondingRowInMessages) {
         newMessages.push(msg);
       }
-    } else if (msg.type === '↓↑') {
+    } else if (msg.type === tReceiveAndSend) {
       // merge onRequestResult row into corresponding onRequest row
       let isCorrespondingRowInNewMessages = false;
       let isCorrespondingRowInMessages = false;
 
       for (let i = newMessages.length - 1; i >= 0; i--) {
-        if (newMessages[i].type === '↓↑') {
+        if (newMessages[i].type === tReceiveAndSend) {
           if (newMessages[i].requestId === msg.requestId) {
             newMessages[i].send = msg.send;
             isCorrespondingRowInNewMessages = true;
@@ -135,7 +140,7 @@ const updateMessages = (oldMessages, newRawMessages) => {
 
       if (!isCorrespondingRowInNewMessages) {
         for (let i = oldMessages.length - 1; i >= 0; i--) {
-          if (oldMessages[i].type === '↓↑') {
+          if (oldMessages[i].type === tReceiveAndSend) {
             if (oldMessages[i].requestId === msg.requestId) {
               updatedMessages[i] = structuredClone(oldMessages[i]);
               updatedMessages[i].send = msg.send;
